@@ -1,0 +1,10 @@
+.container {
+    max-width: 450px;
+    border: 1px solid #000000;
+    margin: 20px auto;
+    padding-bottom: 30px;
+}
+
+h1 {
+    text-align: center;
+}

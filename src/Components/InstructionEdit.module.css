@@ -1,0 +1,24 @@
+.container {
+	max-width: 400px;
+	margin: 5px auto;
+	display: flex;
+	border: 1px solid #ccc;
+}
+.item {
+	margin: auto 5px;
+	font-size: 1.0em;
+    
+}
+
+.pc_is_here {
+    background: rgb(168, 255, 172);
+    width: 15px;
+	text-align: center;
+}
+
+.address {
+    background: rgb(242, 255, 168);
+    width: 15px;
+	text-align: center;
+}
+
