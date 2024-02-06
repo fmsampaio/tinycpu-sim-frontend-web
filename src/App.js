@@ -2,6 +2,7 @@ import styles from './App.module.css';
 import { useEffect, useState } from 'react';
 import InstructionMemory from './Components/InstructionMemory';
 import DataMemory from './Components/DataMemory'
+import Register from './Components/Register';
 
 function App() {
 
@@ -80,6 +81,18 @@ function App() {
     <div className = {styles.container}>
       <InstructionMemory memoryData = {instMem} updateMem = {updateInstMem} />
       <DataMemory memoryData = {dataMem} updateMem = {updateDataMem} />
+      <div className = {styles.regs_container}>
+        <h1>Registers</h1>
+        <div className = {styles.internal_regs_container}>
+          <Register name="PC" data="12" type="4-bit-dec"/>
+          <Register name="RI" data="12" type="8-bit-hex"/>
+          <Register name="RA" data="40" type="8-bit-dec"/>
+          <Register name="RB" data="80" type="8-bit-dec"/>
+          <Register name="RZ" data="false" type="1-bit"/>
+          <Register name="RN" data="true" type="1-bit"/>
+        </div>
+        
+      </div>
     </div>
 
   );
