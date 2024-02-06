@@ -1,28 +1,18 @@
 .container {
-	min-width: 350px;
-	max-width: 400px;
+    width: 80%;
 	margin: 5px auto;
 	display: flex;
 }
 
 .item {
+    max-width : 100px;
 	margin: auto 5px;
 	font-size: 1.0em;
 }
 
-.not_valid {
-	background-color: rgb(255, 218, 218);
-}
-
-.pc_is_here {
-    background: rgb(168, 255, 172);
-    width: 15px;
-	text-align: center;
-}
 
 .address {
     background: rgb(242, 255, 168);
     width: 15px;
 	text-align: center;
 }
-
