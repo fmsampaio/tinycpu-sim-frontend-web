@@ -3,6 +3,9 @@ import { useEffect, useState } from 'react';
 import InstructionMemory from './Components/InstructionMemory';
 import DataMemory from './Components/DataMemory'
 import RegisterBank from './Components/RegisterBank';
+import SimulationControl from './Components/SimulationControl';
+import { instructionExecution, instructionFetch, copyAndChangeMemoryPosition } from "./Core/TinyCPUFunctions"
+
 
 function App() {
 
@@ -40,51 +43,52 @@ function App() {
     ])
 
     setInstMem([
-      {pcIsHere: true , address : 0 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : -1, hex : ""}},
-      {pcIsHere: false, address : 1 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : -1, hex : ""}},
-      {pcIsHere: false, address : 2 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : -1, hex : ""}},
-      {pcIsHere: false, address : 3 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : -1, hex : ""}},
-      {pcIsHere: false, address : 4 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : -1, hex : ""}},
-      {pcIsHere: false, address : 5 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : -1, hex : ""}},
-      {pcIsHere: false, address : 6 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : -1, hex : ""}},
-      {pcIsHere: false, address : 7 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : -1, hex : ""}},
-      {pcIsHere: false, address : 8 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : -1, hex : ""}},
-      {pcIsHere: false, address : 9 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : -1, hex : ""}},
-      {pcIsHere: false, address : 10 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : -1, hex : ""}},
-      {pcIsHere: false, address : 11 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : -1, hex : ""}},
-      {pcIsHere: false, address : 12 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : -1, hex : ""}},
-      {pcIsHere: false, address : 13 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : -1, hex : ""}},
-      {pcIsHere: false, address : 14 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : -1, hex : ""}},
-      {pcIsHere: false, address : 15 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : -1, hex : ""}}    ])
+      {pcIsHere: true , address : 0 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {pcIsHere: false, address : 1 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {pcIsHere: false, address : 2 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {pcIsHere: false, address : 3 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {pcIsHere: false, address : 4 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {pcIsHere: false, address : 5 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {pcIsHere: false, address : 6 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {pcIsHere: false, address : 7 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {pcIsHere: false, address : 8 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {pcIsHere: false, address : 9 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {pcIsHere: false, address : 10 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {pcIsHere: false, address : 11 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {pcIsHere: false, address : 12 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {pcIsHere: false, address : 13 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {pcIsHere: false, address : 14 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {pcIsHere: false, address : 15 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}}    ])
   }, []
   )
 
-  function updateInstMem(address, instruction) {
-    var updatedInstMem = []
-    for (let i = 0; i < 16; i++) {
-      if(i !== address) {
-        updatedInstMem.push(instMem[i])
-      }
-      else {
-        updatedInstMem.push(instruction)
-      }
-    }
-    setInstMem(updatedInstMem)
+  useEffect( () => {
+    console.log("[Effect Data Mem]")
+    console.log(dataMem)
+  }, [dataMem])
+
+  useEffect( () => {
+    console.log("[Effect Inst Mem]")
     console.log(instMem)
+  }, [instMem])
+
+  function updateInstMem(address, instruction) {
+    setInstMem(copyAndChangeMemoryPosition(instMem, address, instruction))
   }
 
   function updateDataMem(address, data) {
-    var updatedDataMem = []
-    for (let i = 0; i < 16; i++) {
-      if(i !== address) {
-        updatedDataMem.push(dataMem[i])
-      }
-      else {
-        updatedDataMem.push(data)
-      }
-    }
-    setDataMem(updatedDataMem)
-    console.log(dataMem)
+    setDataMem(copyAndChangeMemoryPosition(dataMem, address, data))
+  }
+
+  function handleStepBtn() {
+    const returnInstFetch = instructionFetch( instMem, regs )
+    const returnInstExec = instructionExecution( dataMem, returnInstFetch.regs, returnInstFetch.curr_inst, updateDataMem  )
+
+
+
+    setRegs(returnInstExec.regs)
+
+
   }
 
   return (
@@ -92,6 +96,7 @@ function App() {
       <InstructionMemory memoryData = {instMem} updateMem = {updateInstMem} />
       <DataMemory memoryData = {dataMem} updateMem = {updateDataMem} />
       <RegisterBank regs={regs} />
+      <SimulationControl handleStepBtn={handleStepBtn}/>
     </div>
 
   );

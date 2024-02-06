@@ -43,7 +43,66 @@ const parseAssembly = function (assembly) {
     }
 }
 
-export default parseAssembly
+
+const instructionFetch = function (instMem, regs) {
+    const currInstruction = instMem[regs.PC]
+    console.log(currInstruction)
+
+    const newRegsState = {
+      ...regs, 
+      "RI" : currInstruction.inst.dec, 
+      "PC" : regs.PC + 1
+    }
+
+    return {
+        regs : newRegsState,
+        curr_inst : currInstruction
+    }
+}
+
+const instructionExecution = function(dataMem, regs, currInstruction, updateDataMem) {
+    const inst = currInstruction.inst
+
+    var newRegsState = regs
+
+    if(inst.fields.inst === "LDR") {
+        let memAddress = parseInt(inst.fields.mem)
+        if(inst.fields.reg === "RA") {
+            newRegsState = {
+                ...regs,
+                "RA" : dataMem[memAddress].data
+            }
+        }
+        else {
+            newRegsState = {
+                ...regs,
+                "RB" : dataMem[memAddress].data
+            }
+        }
+    }
+    else if(inst.fields.inst === "STR") {
+        let memAddress = parseInt(inst.fields.mem)
+        var newData = {
+            "address" : memAddress,
+            "data" : (inst.fields.reg === "RA") ? regs.RA : regs.RB
+        }
+        console.log(newData)
+        updateDataMem(memAddress, newData)
+    }
+
+    return {
+        regs : newRegsState
+    }
+}
+
+function copyAndChangeMemoryPosition(memory, position, newContent) {
+    return memory.map((oldContent, i) => {
+        if (i === position) return newContent;
+        return oldContent;
+      })
+}
+
+export {parseAssembly, instructionFetch, instructionExecution, copyAndChangeMemoryPosition}
 
 function parseAssemblyFields(assembly) {
     const assemblyStr = String(assembly).trim().toUpperCase()
@@ -174,3 +233,4 @@ function dec2bin(dec) {
     }
     return binStr.substring(binStr.length - 4)
 }
+

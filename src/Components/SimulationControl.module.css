@@ -4,8 +4,20 @@
     margin: 20px auto;
     padding-bottom: 30px;
     margin: 50px 25px 0 25px;
+    height:fit-content
 }
 
 h1 {
     text-align: center;
+}
+
+
+.btns_container {
+    display: grid;
+    grid-template-columns: auto auto;
+    place-items: center;
+}
+
+button {
+    margin: 10px 10px 10px 10px
 }

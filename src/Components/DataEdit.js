@@ -1,8 +1,13 @@
 import styles from "./DataEdit.module.css"
-import {useState} from "react"
+import {useState, useEffect} from "react"
 
 function DataEdit( {data, updateMem} ) {
     const [dataState, setDataState] = useState(data)
+    const [dataValue, setDataValue] = useState(data.data.toString())
+
+    useEffect( () => {
+        setDataValue(data.data.toString())
+    }, [data])
 
     const handleFocus = (event) => event.target.select();
 
@@ -26,6 +31,11 @@ function DataEdit( {data, updateMem} ) {
         updateMem(newDataState.address, newDataState)
     }
 
+    function handleOnChange(e) {
+        setDataValue(e.target.value)
+    }
+    
+
     return (
         <div className = {styles.container}>
             <div className = {`${styles.item} ${styles.address}`}>
@@ -34,10 +44,11 @@ function DataEdit( {data, updateMem} ) {
             <div>
                 <input
                     type = "text"
-                    defaultValue = {dataState.data}
+                    value = {dataValue}
                     className = {styles.item}
                     onBlur = {handleDataInput}
                     onFocus = {handleFocus}
+                    onChange = {handleOnChange}
                 />
             </div>
         </div>
