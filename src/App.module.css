@@ -3,18 +3,3 @@
   display: flex;
 }
 
-.regs_container {
-  margin: 50px 25px 0 25px;
-  border: 1px solid #000000;
-  min-width: 200px;
-}
-
-.internal_regs_container {
-  display : grid;
-  grid-template-columns: auto auto;
-  place-items: center;
-}
-
-h1 {
-  text-align: center;
-}

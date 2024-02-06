@@ -2,14 +2,24 @@ import styles from './App.module.css';
 import { useEffect, useState } from 'react';
 import InstructionMemory from './Components/InstructionMemory';
 import DataMemory from './Components/DataMemory'
-import Register from './Components/Register';
+import RegisterBank from './Components/RegisterBank';
 
 function App() {
 
   const [instMem, setInstMem] = useState( [] )
   const [dataMem, setDataMem] = useState( [] )
+  const [regs, setRegs] = useState( [] )
   
   useEffect( () => {
+    setRegs({
+      RA : 0,
+      RB : 0,
+      PC : 0,
+      RI : 0,
+      RN : 0,
+      RZ : 0
+    })
+    
     setDataMem([
       {address : 0, data : 0}, 
       {address : 1, data : 0}, 
@@ -81,18 +91,7 @@ function App() {
     <div className = {styles.container}>
       <InstructionMemory memoryData = {instMem} updateMem = {updateInstMem} />
       <DataMemory memoryData = {dataMem} updateMem = {updateDataMem} />
-      <div className = {styles.regs_container}>
-        <h1>Registers</h1>
-        <div className = {styles.internal_regs_container}>
-          <Register name="PC" data="12" type="4-bit-dec"/>
-          <Register name="RI" data="12" type="8-bit-hex"/>
-          <Register name="RA" data="40" type="8-bit-dec"/>
-          <Register name="RB" data="80" type="8-bit-dec"/>
-          <Register name="RZ" data="false" type="1-bit"/>
-          <Register name="RN" data="true" type="1-bit"/>
-        </div>
-        
-      </div>
+      <RegisterBank regs={regs} />
     </div>
 
   );
