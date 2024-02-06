@@ -15,11 +15,11 @@ function InstructionEdit( {instruction, updateMem} ) {
         var newInst = {
             pcIsHere : instState.pcIsHere,
             address : instState.address,
-            assembly : e.target.value,
+            assembly : e.target.value.toUpperCase(),
             inst : newInstData
         }
 
-        console.log(newInst)
+        e.target.value = e.target.value.toUpperCase()
 
         setInstState(newInst)
         updateMem(newInst.address, newInst)
@@ -35,13 +35,23 @@ function InstructionEdit( {instruction, updateMem} ) {
                 {instState.address}
             </div>
             <div>
-                <input 
-                    type= "text"
-                    defaultValue= {instState.assembly}
-                    className = {`${styles.item}`}
-                    onBlur = {handleAssemblyInput}
-                    onFocus = {handleFocus}
-                />
+                { (instState.inst.is_valid | instState.assembly === "") ? 
+                    <input 
+                        type= "text"
+                        defaultValue= {instState.assembly}        
+                        className = {styles.item}
+                        onBlur = {handleAssemblyInput}
+                        onFocus = {handleFocus}
+                    />
+                :
+                    <input 
+                        type= "text"
+                        defaultValue= {instState.assembly}        
+                        className = {`${styles.item} ${styles.not_valid}`}
+                        onBlur = {handleAssemblyInput}
+                        onFocus = {handleFocus}
+                    />
+                }
             </div>
             <div className={styles.item}>
                 {instState.inst.hex}
@@ -49,7 +59,6 @@ function InstructionEdit( {instruction, updateMem} ) {
             <div className={styles.item}>
                 {instState.inst.bin}
             </div>
-
             
         </div>
         

@@ -1,23 +1,32 @@
 const parseAssembly = function (assembly) {
-    const fields = parseAssemblyFields(assembly)
+    const parsing = parseAssemblyFields(assembly)
+    const fieldsParsed = parsing.fields
 
-    if(!fields.is_valid)
-        return ""
+    if(!parsing.is_valid)
+        return {
+            "is_valid" : false,
+            "fields" : {},
+            "bin" : "",
+            "dec" : -1,
+            "hex" : ""
+        }
 
-    var binCodeStr = getOpCode(fields.inst)
+    console.log(fieldsParsed)
 
-    if(isRegInstruction(fields.inst)) {
-        binCodeStr = binCodeStr.concat(getRegCode(fields.reg))
+    var binCodeStr = getOpCode(fieldsParsed.inst)
+
+    if(isRegInstruction(fieldsParsed.inst)) {
+        binCodeStr = binCodeStr.concat(getRegCode(fieldsParsed.reg))
     }
-    else if(isJcInstruction(fields.inst)) {
-        binCodeStr = binCodeStr.concat(getCcCode(fields.cc))
+    else if(isJcInstruction(fieldsParsed.inst)) {
+        binCodeStr = binCodeStr.concat(getCcCode(fieldsParsed.cc))
     }
     else {
         binCodeStr = binCodeStr.concat("0")
     }
     
-    if(!isHltInstruction(fields.inst)) {
-        binCodeStr = binCodeStr.concat(getMemCode(fields.mem))
+    if(!isHltInstruction(fieldsParsed.inst)) {
+        binCodeStr = binCodeStr.concat(getMemCode(fieldsParsed.mem))
     }
     else {
         binCodeStr = binCodeStr.concat("0000")
@@ -26,48 +35,87 @@ const parseAssembly = function (assembly) {
     const decInt = parseInt(binCodeStr, 2)
 
     return {
-        fields : fields,
-        bin : binCodeStr,
-        dec : decInt,
-        hex : decInt.toString(16).toUpperCase()
+        "is_valid" : true,
+        "fields" : fieldsParsed,
+        "bin" : binCodeStr,
+        "dec" : decInt,
+        "hex" : decInt.toString(16).toUpperCase()
     }
 }
 
 export default parseAssembly
 
 function parseAssemblyFields(assembly) {
-    const assemblyStr = String(assembly)
-    var tokens = assemblyStr.split(' ')
-
-    var inst = tokens[0]
-    var reg = ""
-    var cc = ""
-    var mem = ""
-
+    const assemblyStr = String(assembly).trim().toUpperCase()
+    
     var isValid = true
+    var fields = {}
 
-    if(isRegInstruction(inst)) {
-        reg = tokens[1]
-        mem = tokens[2]  
+    if(validateRegInstruction(assembly) || 
+        validateJmpInstruction(assembly) || 
+        validateJcInstruction(assembly) ||
+        validateHltInstruction(assembly) 
+    ) {
+
+        var tokens = assemblyStr.split(' ')
+        
+        var inst = tokens[0]
+        
+        if(isRegInstruction(inst)) {
+            fields = {
+                "inst" : inst,
+                "reg" : tokens[1],
+                "mem" : tokens[2]
+            }
+        }
+        else if(isJcInstruction(inst)) {
+            fields = {
+                "inst" : inst,
+                "cc" : tokens[1],
+                "mem" : tokens[2]
+            }
+        }
+        else if(isJmpInstruction(inst)) {
+            fields = {
+                "inst" : inst,
+                "mem" : tokens[1]
+            }
+        }
+        else {
+            fields = {
+                "inst" : inst
+            }
+        }
+
     }
-    else if(isJcInstruction(inst)) {
-        cc = tokens[1]
-        mem = tokens[2]
-    }
-    else if(isJmpInstruction(inst)) {
-        mem = tokens[1]
-    } 
-    else if(! isHltInstruction(inst)) {
+    else {
         isValid = false
     }
 
     return {
         "is_valid" : isValid,
-        "inst" : inst,
-        "reg" : reg,
-        "cc" : cc,
-        "mem" : mem
+        "fields" : fields
     }
+}
+
+function validateRegInstruction(assembly) {
+    const regInstructionMatch = /^(\s*)(LDR|STR|ADD|SUB|ldr|str|add|sub)(\s+)(RA|RB|ra|rb)(\s+)(\d+)(\s*)$/
+    return regInstructionMatch.test(assembly)
+}
+
+function validateJcInstruction(assembly) {
+    const jcInstructionMatch = /^(\s*)(JC|jc)(\s+)(N|Z|n|z)(\s+)(\d+)(\s*)$/
+    return jcInstructionMatch.test(assembly)
+}
+
+function validateJmpInstruction(assembly) {
+    const jmpInstructionMatch = /^(\s*)(JMP|jmp)(\s+)(\d+)(\s*)$/
+    return jmpInstructionMatch.test(assembly)
+}
+
+function validateHltInstruction(assembly) {
+    const hltInstructionMatch = /^(\s*)(HLT|hlt)(\s*)$/
+    return hltInstructionMatch.test(assembly)
 }
 
 function isRegInstruction(inst) {
@@ -107,11 +155,11 @@ function getOpCode(inst) {
 }
 
 function getRegCode(reg) {
-    return (reg === "RA") ? "0" : "1"
+    return (reg === "RA") ? "0" : (reg === "RB") ? "1" : "err"
 }
 
 function getCcCode(cc) {
-    return (cc === "Z") ? "0" : "1"
+    return (cc === "Z") ? "0" : (cc === "N") ? "1" : "err"
 }
 
 function getMemCode(mem) {

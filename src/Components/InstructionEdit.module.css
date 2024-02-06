@@ -4,10 +4,14 @@
 	display: flex;
 	border: 1px solid #ccc;
 }
+
 .item {
 	margin: auto 5px;
 	font-size: 1.0em;
-    
+}
+
+.not_valid {
+	background-color: rgb(255, 218, 218);
 }
 
 .pc_is_here {

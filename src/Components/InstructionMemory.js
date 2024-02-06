@@ -6,7 +6,7 @@ function InstructionMemory( {memoryData, updateMem} ) {
 
     return (
         <div className = {styles.container}>
-            <h1>Instruction Memory</h1>
+            <h1>Instructions Memory</h1>
             <div>
                 { 
                 memoryData.map( (inst) => (
