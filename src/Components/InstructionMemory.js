@@ -1,5 +1,4 @@
 import styles from "./InstructionMemory.module.css"
-import { useState, useEffect } from "react"
 import InstructionEdit from "./InstructionEdit"
 
 function InstructionMemory( {memoryData, updateMem} ) {
