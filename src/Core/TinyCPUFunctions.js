@@ -60,6 +60,94 @@ const instructionFetch = function (instMem, regs) {
     }
 }
 
+const instructionExecutionOnRun = function(dataMem, regs, currInstruction) {
+    const inst = currInstruction.inst
+
+    var newRegsState = regs
+    var wasHltReached = false
+
+    if(inst.fields.inst === "LDR") {
+        let memAddress = parseInt(inst.fields.mem)
+        if(inst.fields.reg === "RA") {
+            newRegsState = {
+                ...regs,
+                "RA" : dataMem[memAddress].data
+            }
+        }
+        else {
+            newRegsState = {
+                ...regs,
+                "RB" : dataMem[memAddress].data
+            }
+        }
+    }
+    else if(inst.fields.inst === "STR") {
+        let memAddress = parseInt(inst.fields.mem)
+        var newData = {
+            "address" : memAddress,
+            "data" : (inst.fields.reg === "RA") ? regs.RA : regs.RB
+        }
+        console.log(newData)
+
+        dataMem = copyAndChangeMemoryPosition(dataMem, memAddress, newData)
+    }
+    else if(inst.fields.inst === "ADD" || inst.fields.inst === "SUB") {
+        let memAddress = parseInt(inst.fields.mem)
+        var ulaResult
+        if(inst.fields.reg === "RA") {
+            ulaResult = (inst.fields.inst === "ADD") ? 
+                regs.RA + dataMem[memAddress].data : 
+                regs.RA - dataMem[memAddress].data 
+            
+            newRegsState = {
+                ...regs,
+                "RA" : ulaResult,
+                "RZ" : (ulaResult === 0 ? 1 : 0),
+                "RN" : (ulaResult < 0 ? 1 : 0)
+            }
+        }
+        else {
+            ulaResult = (inst.fields.inst === "ADD") ? 
+                regs.RB + dataMem[memAddress].data : 
+                regs.RB - dataMem[memAddress].data 
+
+            newRegsState = {
+                ...regs,
+                "RB" : ulaResult,
+                "RZ" : (ulaResult === 0 ? 1 : 0),
+                "RN" : (ulaResult < 0 ? 1 : 0)
+            }
+        }
+    }
+    else if(isJmpInstruction(inst.fields.inst)) {
+        let memAddress = parseInt(inst.fields.mem)
+        newRegsState = {
+            ...regs,
+            "PC" : memAddress
+        }
+    }
+    else if(isJcInstruction(inst.fields.inst)) {
+        let memAddress = parseInt(inst.fields.mem)
+        if( (inst.fields.cc === "Z" && regs.RZ === 1) ||
+            (inst.fields.cc === "N" && regs.RN === 1) ) {
+            newRegsState = {
+                ...regs,
+                "PC" : memAddress
+            }
+        }
+    }
+    else if(isHltInstruction(inst.fields.inst)) {
+        wasHltReached = true
+    }
+
+    return {
+        regs : newRegsState,
+        hlt_reached : wasHltReached,
+        data_memory : dataMem
+    }
+}
+
+
 const instructionExecution = function(dataMem, regs, currInstruction, updateDataMem) {
     const inst = currInstruction.inst
 
@@ -152,7 +240,7 @@ function copyAndChangeMemoryPosition(memory, position, newContent) {
       })
 }
 
-export {parseAssembly, instructionFetch, instructionExecution, copyAndChangeMemoryPosition}
+export {parseAssembly, instructionFetch, instructionExecution, copyAndChangeMemoryPosition, instructionExecutionOnRun}
 
 function parseAssemblyFields(assembly) {
     const assemblyStr = String(assembly).trim().toUpperCase()

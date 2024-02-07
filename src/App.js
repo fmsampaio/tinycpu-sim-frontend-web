@@ -4,7 +4,7 @@ import InstructionMemory from './Components/InstructionMemory';
 import DataMemory from './Components/DataMemory'
 import RegisterBank from './Components/RegisterBank';
 import SimulationControl from './Components/SimulationControl';
-import { instructionExecution, instructionFetch, copyAndChangeMemoryPosition } from "./Core/TinyCPUFunctions"
+import { instructionExecution, instructionFetch, copyAndChangeMemoryPosition, instructionExecutionOnRun } from "./Core/TinyCPUFunctions"
 
 
 function App() {
@@ -13,6 +13,7 @@ function App() {
   const [dataMem, setDataMem] = useState( [] )
   const [regs, setRegs] = useState( [] )
   const [hltReached, setHltReached] = useState( false )
+  const [timeout, setTimeout] = useState ( false )
   
   useEffect( () => {
     resetCpu() 
@@ -79,6 +80,7 @@ function App() {
       RZ : 0
     })
     setHltReached(false)
+    setTimeout(false)
   }
 
   function updateInstMem(address, instruction) {
@@ -99,12 +101,43 @@ function App() {
     }
   }
 
+  function handleRunBtn() {
+    var returnInstFetch = {}
+    var returnInstExec = {}
+
+    var regsTmp = regs
+    var dataMemTmp = dataMem
+    var hltReachedTmp = hltReached
+
+    var countInstructions = 0
+
+    while(!hltReachedTmp) {
+      if(countInstructions > 1000) {
+        setTimeout(true)
+        break
+      }
+
+      returnInstFetch = instructionFetch( instMem, regsTmp )
+      returnInstExec = instructionExecutionOnRun( dataMemTmp, returnInstFetch.regs, returnInstFetch.curr_inst  )
+
+      regsTmp = returnInstExec.regs
+      dataMemTmp = returnInstExec.data_memory
+      hltReachedTmp = returnInstExec.hlt_reached
+
+      countInstructions += 1
+    }
+
+    setDataMem(dataMemTmp)
+    setRegs(returnInstExec.regs)
+    setHltReached(returnInstExec.hlt_reached)
+  }
+
   return (
     <div className = {styles.container}>
       <InstructionMemory memoryData = {instMem} updateMem = {updateInstMem} />
       <DataMemory memoryData = {dataMem} updateMem = {updateDataMem} />
       <RegisterBank regs={regs} />
-      <SimulationControl handleStepBtn={handleStepBtn} handleResetBtn={resetCpu} hltReached={hltReached}/>
+      <SimulationControl handleStepBtn={handleStepBtn} handleResetBtn={resetCpu} hltReached={hltReached} handleRunBtn={handleRunBtn} timeout={timeout}/>
     </div>
 
   );
