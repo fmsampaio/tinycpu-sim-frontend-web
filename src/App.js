@@ -82,11 +82,13 @@ function App() {
   }
 
   function handleStepBtn() {
-    const returnInstFetch = instructionFetch( instMem, regs )
-    const returnInstExec = instructionExecution( dataMem, returnInstFetch.regs, returnInstFetch.curr_inst, updateDataMem  )
+    if(!hltReached) {
+      const returnInstFetch = instructionFetch( instMem, regs )
+      const returnInstExec = instructionExecution( dataMem, returnInstFetch.regs, returnInstFetch.curr_inst, updateDataMem  )
 
-    setRegs(returnInstExec.regs)
-    setHltReached(returnInstExec.hlt_reached)
+      setRegs(returnInstExec.regs)
+      setHltReached(returnInstExec.hlt_reached)
+    }
   }
 
   return (

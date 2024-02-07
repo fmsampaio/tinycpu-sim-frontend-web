@@ -16,7 +16,7 @@ function SimulationControl( {handleStepBtn, hltReached} ) {
                 <button>Run</button>
                 <button>Reset</button>
             </div>
-            <Alert message="HLT reached! End of program." type="success" show={hltReached}/>     
+            <Alert message="HLT reached! End of program..." type="success" show={hltReached}/>     
         </div>
     )
 }
