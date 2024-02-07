@@ -7,17 +7,6 @@ function InstructionEdit( {instruction, updateMem, pcIsHere} ) {
     const [instState, setInstState] = useState(instruction)
     const [instValue, setInstValue] = useState(instruction.assembly)
 
-    const pcIsHereClasses = useRef("")
-
-    useEffect( () => {
-        pcIsHereClasses.current = `${styles.container} `
-        if(pcIsHere) {
-            pcIsHereClasses.current += `${styles.pc_highlight}`
-        }
-
-        console.log(pcIsHereClasses.current)
-    }, [pcIsHere])
-
     useEffect( () => {
         setInstState(instruction)
         setInstValue(instruction.assembly)
