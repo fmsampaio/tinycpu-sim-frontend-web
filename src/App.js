@@ -15,7 +15,8 @@ function App() {
   const [hltReached, setHltReached] = useState( false )
   
   useEffect( () => {
-    resetCpu()    
+    resetCpu() 
+    resetMemories()   
   }, []
   )
 
@@ -29,16 +30,8 @@ function App() {
     console.log(instMem)
   }, [instMem])
 
-  function resetCpu() {
-    setRegs({
-      RA : 0,
-      RB : 0,
-      PC : 0,
-      RI : 0,
-      RN : 0,
-      RZ : 0
-    })
-    
+
+  function resetMemories() {
     setDataMem([
       {address : 0, data : 0}, 
       {address : 1, data : 0}, 
@@ -57,7 +50,6 @@ function App() {
       {address : 14, data : 0}, 
       {address : 15, data : 0}
     ])
-
     setInstMem([
       {pcIsHere: true , address : 0 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
       {pcIsHere: false, address : 1 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
@@ -75,7 +67,17 @@ function App() {
       {pcIsHere: false, address : 13 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
       {pcIsHere: false, address : 14 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
       {pcIsHere: false, address : 15 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}}    ])
+  }
 
+  function resetCpu() {
+    setRegs({
+      RA : 0,
+      RB : 0,
+      PC : 0,
+      RI : 0,
+      RN : 0,
+      RZ : 0
+    })
     setHltReached(false)
   }
 
