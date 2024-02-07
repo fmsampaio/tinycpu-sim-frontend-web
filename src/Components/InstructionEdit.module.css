@@ -5,6 +5,15 @@
 	display: flex;
 }
 
+.container_pc_highlight {
+	min-width: 350px;
+	max-width: 400px;
+	margin: 5px auto;
+	display: flex;
+	border : 0.5px solid rgba(0, 128, 0, 0.575);
+	background: rgba(2, 168, 2, 0.123);
+}
+
 .item {
 	margin: auto 5px;
 	font-size: 1.0em;
@@ -16,7 +25,7 @@
 
 .pc_is_here {
     background: rgb(168, 255, 172);
-    width: 15px;
+    width: 25px;
 	text-align: center;
 }
 
