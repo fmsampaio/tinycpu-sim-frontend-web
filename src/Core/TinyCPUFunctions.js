@@ -89,6 +89,51 @@ const instructionExecution = function(dataMem, regs, currInstruction, updateData
         console.log(newData)
         updateDataMem(memAddress, newData)
     }
+    else if(inst.fields.inst === "ADD" || inst.fields.inst === "SUB") {
+        let memAddress = parseInt(inst.fields.mem)
+        var ulaResult
+        if(inst.fields.reg === "RA") {
+            ulaResult = (inst.fields.inst === "ADD") ? 
+                regs.RA + dataMem[memAddress].data : 
+                regs.RA - dataMem[memAddress].data 
+            
+            newRegsState = {
+                ...regs,
+                "RA" : ulaResult,
+                "RZ" : (ulaResult === 0 ? 1 : 0),
+                "RN" : (ulaResult < 0 ? 1 : 0)
+            }
+        }
+        else {
+            ulaResult = (inst.fields.inst === "ADD") ? 
+                regs.RB + dataMem[memAddress].data : 
+                regs.RB - dataMem[memAddress].data 
+
+            newRegsState = {
+                ...regs,
+                "RB" : ulaResult,
+                "RZ" : (ulaResult === 0 ? 1 : 0),
+                "RN" : (ulaResult < 0 ? 1 : 0)
+            }
+        }
+    }
+    else if(isJmpInstruction(inst.fields.inst)) {
+        let memAddress = parseInt(inst.fields.mem)
+        newRegsState = {
+            ...regs,
+            "PC" : memAddress
+        }
+    }
+    else if(isJcInstruction(inst.fields.inst)) {
+        let memAddress = parseInt(inst.fields.mem)
+        if( (inst.fields.cc === "Z" && regs.RZ === 1) ||
+            (inst.fields.cc === "N" && regs.RN === 1) ) {
+            newRegsState = {
+                ...regs,
+                "PC" : memAddress
+            }
+        }
+    }
 
     return {
         regs : newRegsState
