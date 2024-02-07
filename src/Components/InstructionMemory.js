@@ -1,7 +1,7 @@
 import styles from "./InstructionMemory.module.css"
 import InstructionEdit from "./InstructionEdit"
 
-function InstructionMemory( {memoryData, updateMem, pc} ) {
+function InstructionMemory( {memoryData, updateMem, pc, highlight} ) {
 
     return (
         <div className = {styles.container}>
@@ -9,7 +9,7 @@ function InstructionMemory( {memoryData, updateMem, pc} ) {
             <div>
                 { 
                 memoryData.map( (inst) => (
-                    <InstructionEdit instruction={inst} updateMem={updateMem} pcIsHere={pc === inst.address} />
+                    <InstructionEdit instruction={inst} updateMem={updateMem} pcIsHere={pc === inst.address} highlight={highlight.highlight && (highlight.address === inst.address)} />
                 ))
                 }
             </div>

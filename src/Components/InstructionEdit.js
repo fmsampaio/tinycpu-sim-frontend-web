@@ -2,7 +2,7 @@ import styles from "./InstructionEdit.module.css"
 import { parseAssembly } from "../Core/TinyCPUFunctions"
 import { useEffect, useState } from "react"
 
-function InstructionEdit( {instruction, updateMem, pcIsHere} ) {
+function InstructionEdit( {instruction, updateMem, pcIsHere, highlight} ) {
 
     const [instState, setInstState] = useState(instruction)
     const [instValue, setInstValue] = useState(instruction.assembly)
@@ -38,7 +38,7 @@ function InstructionEdit( {instruction, updateMem, pcIsHere} ) {
 
     return (
         
-        <div className = {pcIsHere ? styles.container_pc_highlight : styles.container}>
+        <div className = {pcIsHere ? styles.container_pc_highlight : (highlight ? styles.container_mem_highlight : styles.container)}>
             <div className = {`${styles.item} ${styles.pc_is_here}`}>
                 {pcIsHere ? "PC" : ""}
             </div>

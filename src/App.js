@@ -15,6 +15,7 @@ function App() {
   const [hltReached, setHltReached] = useState( false )
   const [timeout, setTimeout] = useState ( false )
   const [highlightDataMem, setHighlightDataMem] = useState ( {highlight : false, address : -1} )
+  const [highlightInstMem, setHighlightInstMem] = useState ( {highlight : false, address : -1})
   
   useEffect( () => {
     resetCpu() 
@@ -31,7 +32,8 @@ function App() {
     console.log("[Effect Inst Mem]")
     console.log(instMem)
 
-    handleDataMemHighlight(regs.PC)  
+    handleDataMemHighlight(regs.PC)
+    handleInstMemHighlight(regs.PC)  
   }, [instMem])
 
 
@@ -85,6 +87,7 @@ function App() {
     setHltReached(false)
     setTimeout(false)
     handleDataMemHighlight(0)
+    handleInstMemHighlight(0)
   }
 
   function updateInstMem(address, instruction) {
@@ -104,6 +107,7 @@ function App() {
       setHltReached(returnInstExec.hlt_reached)
 
       handleDataMemHighlight(returnInstExec.regs.PC)
+      handleInstMemHighlight(returnInstExec.regs.PC)
     }
   }
 
@@ -138,6 +142,29 @@ function App() {
     setHltReached(returnInstExec.hlt_reached)
   }
 
+  function handleInstMemHighlight(PC) {
+    if(instMem.length === 0) 
+      return
+
+      var jumpInstructions = ["JMP", "JC"]
+      var currInst = instMem[PC]
+
+      if(currInst.inst.is_valid) {
+        var highlight = {
+          highlight : false,
+          address : -1
+        } 
+        
+        if(jumpInstructions.includes(currInst.inst.fields.inst)) {
+          highlight = {
+            highlight : true,
+            address : parseInt(currInst.inst.fields.mem)
+          }
+        }
+        setHighlightInstMem(highlight)
+      }
+  }
+
   function handleDataMemHighlight(PC) {
     if(instMem.length === 0) 
       return
@@ -145,7 +172,7 @@ function App() {
     var dataMemInstructions = ["LDR", "STR", "ADD", "SUB"]
     var currInst = instMem[PC]
 
-     if(currInst.inst.is_valid) {
+    if(currInst.inst.is_valid) {
       
       var highlight = {
         highlight : false,
@@ -166,7 +193,7 @@ function App() {
 
   return (
     <div className = {styles.container}>
-      <InstructionMemory memoryData = {instMem} updateMem = {updateInstMem} pc = {regs.PC}/>
+      <InstructionMemory memoryData = {instMem} updateMem = {updateInstMem} pc = {regs.PC} highlight = {highlightInstMem}/>
       <DataMemory memoryData = {dataMem} updateMem = {updateDataMem} highlight = {highlightDataMem}/>
       <RegisterBank regs={regs} />
       <SimulationControl handleStepBtn={handleStepBtn} handleResetBtn={resetCpu} hltReached={hltReached} handleRunBtn={handleRunBtn} timeout={timeout}/>
