@@ -52,22 +52,22 @@ function App() {
       {address : 15, data : 0}
     ])
     setInstMem([
-      {pcIsHere: true , address : 0 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
-      {pcIsHere: false, address : 1 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
-      {pcIsHere: false, address : 2 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
-      {pcIsHere: false, address : 3 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
-      {pcIsHere: false, address : 4 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
-      {pcIsHere: false, address : 5 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
-      {pcIsHere: false, address : 6 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
-      {pcIsHere: false, address : 7 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
-      {pcIsHere: false, address : 8 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
-      {pcIsHere: false, address : 9 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
-      {pcIsHere: false, address : 10 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
-      {pcIsHere: false, address : 11 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
-      {pcIsHere: false, address : 12 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
-      {pcIsHere: false, address : 13 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
-      {pcIsHere: false, address : 14 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
-      {pcIsHere: false, address : 15 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}}    ])
+      {address : 0 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {address : 1 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {address : 2 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {address : 3 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {address : 4 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {address : 5 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {address : 6 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {address : 7 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {address : 8 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {address : 9 ,  assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {address : 10 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {address : 11 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {address : 12 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {address : 13 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {address : 14 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
+      {address : 15 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}}    ])
   }
 
   function resetCpu() {
@@ -134,7 +134,7 @@ function App() {
 
   return (
     <div className = {styles.container}>
-      <InstructionMemory memoryData = {instMem} updateMem = {updateInstMem} />
+      <InstructionMemory memoryData = {instMem} updateMem = {updateInstMem} pc = {regs.PC}/>
       <DataMemory memoryData = {dataMem} updateMem = {updateDataMem} />
       <RegisterBank regs={regs} />
       <SimulationControl handleStepBtn={handleStepBtn} handleResetBtn={resetCpu} hltReached={hltReached} handleRunBtn={handleRunBtn} timeout={timeout}/>

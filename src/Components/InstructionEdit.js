@@ -2,7 +2,7 @@ import styles from "./InstructionEdit.module.css"
 import { parseAssembly } from "../Core/TinyCPUFunctions"
 import { useEffect, useState } from "react"
 
-function InstructionEdit( {instruction, updateMem} ) {
+function InstructionEdit( {instruction, updateMem, pcIsHere} ) {
 
     const [instState, setInstState] = useState(instruction)
     const [instValue, setInstValue] = useState(instruction.assembly)
@@ -38,7 +38,7 @@ function InstructionEdit( {instruction, updateMem} ) {
         
         <div className = {styles.container}>
             <div className = {`${styles.item} ${styles.pc_is_here}`}>
-                {instState.pcIsHere ? "*" : "-"}
+                {pcIsHere ? "*" : ""}
             </div>
             <div className = {`${styles.item} ${styles.address}`}>
                 {instState.address}
