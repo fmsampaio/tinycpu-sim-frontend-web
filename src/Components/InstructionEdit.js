@@ -1,10 +1,20 @@
 import styles from "./InstructionEdit.module.css"
 import { parseAssembly } from "../Core/TinyCPUFunctions"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 function InstructionEdit( {instruction, updateMem} ) {
 
     const [instState, setInstState] = useState(instruction)
+    const [instValue, setInstValue] = useState(instruction.assembly)
+
+    useEffect( () => {
+        setInstState(instruction)
+        setInstValue(instruction.assembly)
+    }, [instruction])
+
+    function handleOnChange(e) {
+        setInstValue(e.target.value)
+    }
 
     const handleFocus = (event) => event.target.select();
     
@@ -19,8 +29,7 @@ function InstructionEdit( {instruction, updateMem} ) {
             inst : newInstData
         }
 
-        e.target.value = e.target.value.toUpperCase()
-
+        setInstValue(e.target.value.toUpperCase())
         setInstState(newInst)
         updateMem(newInst.address, newInst)
     }
@@ -38,18 +47,20 @@ function InstructionEdit( {instruction, updateMem} ) {
                 { (instState.inst.is_valid | instState.assembly === "") ? 
                     <input 
                         type= "text"
-                        defaultValue= {instState.assembly}        
+                        value= {instValue}        
                         className = {styles.item}
                         onBlur = {handleAssemblyInput}
                         onFocus = {handleFocus}
+                        onChange = {handleOnChange}
                     />
                 :
                     <input 
                         type= "text"
-                        defaultValue= {instState.assembly}        
+                        value= {instValue}
                         className = {`${styles.item} ${styles.not_valid}`}
                         onBlur = {handleAssemblyInput}
                         onFocus = {handleFocus}
+                        onChange = {handleOnChange}
                     />
                 }
             </div>

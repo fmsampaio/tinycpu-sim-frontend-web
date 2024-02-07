@@ -15,6 +15,21 @@ function App() {
   const [hltReached, setHltReached] = useState( false )
   
   useEffect( () => {
+    resetCpu()    
+  }, []
+  )
+
+  useEffect( () => {
+    console.log("[Effect Data Mem]")
+    console.log(dataMem)
+  }, [dataMem])
+
+  useEffect( () => {
+    console.log("[Effect Inst Mem]")
+    console.log(instMem)
+  }, [instMem])
+
+  function resetCpu() {
     setRegs({
       RA : 0,
       RB : 0,
@@ -60,18 +75,9 @@ function App() {
       {pcIsHere: false, address : 13 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
       {pcIsHere: false, address : 14 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}},
       {pcIsHere: false, address : 15 , assembly : "", inst : {is_valid : false, fields : {}, bin : "", dec : 0, hex : ""}}    ])
-  }, []
-  )
 
-  useEffect( () => {
-    console.log("[Effect Data Mem]")
-    console.log(dataMem)
-  }, [dataMem])
-
-  useEffect( () => {
-    console.log("[Effect Inst Mem]")
-    console.log(instMem)
-  }, [instMem])
+    setHltReached(false)
+  }
 
   function updateInstMem(address, instruction) {
     setInstMem(copyAndChangeMemoryPosition(instMem, address, instruction))
@@ -96,7 +102,7 @@ function App() {
       <InstructionMemory memoryData = {instMem} updateMem = {updateInstMem} />
       <DataMemory memoryData = {dataMem} updateMem = {updateDataMem} />
       <RegisterBank regs={regs} />
-      <SimulationControl handleStepBtn={handleStepBtn} hltReached={hltReached}/>
+      <SimulationControl handleStepBtn={handleStepBtn} handleResetBtn={resetCpu} hltReached={hltReached}/>
     </div>
 
   );

@@ -1,7 +1,7 @@
 import Alert from "./Alert"
 import styles from "./SimulationControl.module.css"
 
-function SimulationControl( {handleStepBtn, hltReached} ) {
+function SimulationControl( {handleStepBtn, handleResetBtn, hltReached} ) {
     
 
     return (
@@ -11,10 +11,14 @@ function SimulationControl( {handleStepBtn, hltReached} ) {
                 <button 
                     onClick={handleStepBtn}
                 >
-                        Step
+                    Step
                 </button>
                 <button>Run</button>
-                <button>Reset</button>
+                <button
+                    onClick={handleResetBtn}
+                >
+                    Reset
+                </button>
             </div>
             <Alert message="HLT reached! End of program..." type="success" show={hltReached}/>     
         </div>
