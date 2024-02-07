@@ -4,7 +4,8 @@
     margin: 20px auto;
     padding-bottom: 30px;
     margin: 50px 25px 0 25px;
-    height:fit-content
+    height:fit-content;
+    align-content: center;
 }
 
 h1 {

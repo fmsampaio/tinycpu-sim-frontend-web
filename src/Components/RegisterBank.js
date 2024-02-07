@@ -12,8 +12,10 @@ function RegisterBank( {regs} ) {
           <Register name="RB" data={regs.RB} type="8-bit-dec"/>
           <Register name="RZ" data={regs.RZ} type="1-bit"/>
           <Register name="RN" data={regs.RN} type="1-bit"/>
-        </div>        
+        </div>
+           
       </div>
+
     )
 }
 

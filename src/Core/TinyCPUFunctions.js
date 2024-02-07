@@ -64,6 +64,7 @@ const instructionExecution = function(dataMem, regs, currInstruction, updateData
     const inst = currInstruction.inst
 
     var newRegsState = regs
+    var wasHltReached = false
 
     if(inst.fields.inst === "LDR") {
         let memAddress = parseInt(inst.fields.mem)
@@ -134,9 +135,13 @@ const instructionExecution = function(dataMem, regs, currInstruction, updateData
             }
         }
     }
+    else if(isHltInstruction(inst.fields.inst)) {
+        wasHltReached = true
+    }
 
     return {
-        regs : newRegsState
+        regs : newRegsState,
+        hlt_reached : wasHltReached
     }
 }
 

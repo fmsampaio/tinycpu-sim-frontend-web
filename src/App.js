@@ -12,6 +12,7 @@ function App() {
   const [instMem, setInstMem] = useState( [] )
   const [dataMem, setDataMem] = useState( [] )
   const [regs, setRegs] = useState( [] )
+  const [hltReached, setHltReached] = useState( false )
   
   useEffect( () => {
     setRegs({
@@ -84,11 +85,8 @@ function App() {
     const returnInstFetch = instructionFetch( instMem, regs )
     const returnInstExec = instructionExecution( dataMem, returnInstFetch.regs, returnInstFetch.curr_inst, updateDataMem  )
 
-
-
     setRegs(returnInstExec.regs)
-
-
+    setHltReached(returnInstExec.hlt_reached)
   }
 
   return (
@@ -96,7 +94,7 @@ function App() {
       <InstructionMemory memoryData = {instMem} updateMem = {updateInstMem} />
       <DataMemory memoryData = {dataMem} updateMem = {updateDataMem} />
       <RegisterBank regs={regs} />
-      <SimulationControl handleStepBtn={handleStepBtn}/>
+      <SimulationControl handleStepBtn={handleStepBtn} hltReached={hltReached}/>
     </div>
 
   );
