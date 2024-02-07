@@ -14,10 +14,11 @@ function App() {
   const [regs, setRegs] = useState( [] )
   const [hltReached, setHltReached] = useState( false )
   const [timeout, setTimeout] = useState ( false )
+  const [highlightDataMem, setHighlightDataMem] = useState ( {highlight : false, address : -1} )
   
   useEffect( () => {
     resetCpu() 
-    resetMemories()   
+    resetMemories() 
   }, []
   )
 
@@ -29,6 +30,8 @@ function App() {
   useEffect( () => {
     console.log("[Effect Inst Mem]")
     console.log(instMem)
+
+    handleDataMemHighlight(regs.PC)  
   }, [instMem])
 
 
@@ -81,6 +84,7 @@ function App() {
     })
     setHltReached(false)
     setTimeout(false)
+    handleDataMemHighlight(0)
   }
 
   function updateInstMem(address, instruction) {
@@ -98,6 +102,8 @@ function App() {
 
       setRegs(returnInstExec.regs)
       setHltReached(returnInstExec.hlt_reached)
+
+      handleDataMemHighlight(returnInstExec.regs.PC)
     }
   }
 
@@ -132,10 +138,36 @@ function App() {
     setHltReached(returnInstExec.hlt_reached)
   }
 
+  function handleDataMemHighlight(PC) {
+    if(instMem.length === 0) 
+      return
+    
+    var dataMemInstructions = ["LDR", "STR", "ADD", "SUB"]
+    var currInst = instMem[PC]
+
+     if(currInst.inst.is_valid) {
+      
+      var highlight = {
+        highlight : false,
+        address : -1
+      } 
+
+      if(dataMemInstructions.includes(currInst.inst.fields.inst)) {
+        highlight = {
+          highlight : true,
+          address : parseInt(currInst.inst.fields.mem)
+        }       
+      }
+
+      console.log(highlight)
+      setHighlightDataMem(highlight)
+    }
+  }
+
   return (
     <div className = {styles.container}>
       <InstructionMemory memoryData = {instMem} updateMem = {updateInstMem} pc = {regs.PC}/>
-      <DataMemory memoryData = {dataMem} updateMem = {updateDataMem} />
+      <DataMemory memoryData = {dataMem} updateMem = {updateDataMem} highlight = {highlightDataMem}/>
       <RegisterBank regs={regs} />
       <SimulationControl handleStepBtn={handleStepBtn} handleResetBtn={resetCpu} hltReached={hltReached} handleRunBtn={handleRunBtn} timeout={timeout}/>
     </div>
