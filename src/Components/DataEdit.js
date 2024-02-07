@@ -1,7 +1,7 @@
 import styles from "./DataEdit.module.css"
 import {useState, useEffect} from "react"
 
-function DataEdit( {data, updateMem} ) {
+function DataEdit( {data, updateMem, highlight} ) {
     const [dataState, setDataState] = useState(data)
     const [dataValue, setDataValue] = useState(data.data.toString())
 
@@ -37,7 +37,7 @@ function DataEdit( {data, updateMem} ) {
     
 
     return (
-        <div className = {styles.container}>
+        <div className = {highlight ? styles.container_highlight : styles.container}>
             <div className = {`${styles.item} ${styles.address}`}>
                 {dataState.address}
             </div>

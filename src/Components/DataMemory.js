@@ -1,7 +1,7 @@
 import styles from "./DataMemory.module.css"
 import DataEdit from "./DataEdit"
 
-function DataMemory( {memoryData, updateMem} ) {
+function DataMemory( {memoryData, updateMem, highlight} ) {
 
     return (
         <div className = {styles.container}>
@@ -9,7 +9,7 @@ function DataMemory( {memoryData, updateMem} ) {
             <div>
                 { 
                 memoryData.map( (data) => (
-                    <DataEdit data={data} updateMem={updateMem}/>
+                    <DataEdit data={data} updateMem={updateMem} highlight={highlight.highlight && (highlight.address === data.address)}/>
                 ))
                 }
             </div>

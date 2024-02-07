@@ -1,6 +1,6 @@
 import styles from "./InstructionEdit.module.css"
 import { parseAssembly } from "../Core/TinyCPUFunctions"
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState } from "react"
 
 function InstructionEdit( {instruction, updateMem, pcIsHere} ) {
 
