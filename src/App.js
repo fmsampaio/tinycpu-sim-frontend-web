@@ -5,6 +5,8 @@ import DataMemory from './Components/DataMemory'
 import RegisterBank from './Components/RegisterBank';
 import SimulationControl from './Components/SimulationControl';
 import { instructionExecution, instructionFetch, copyAndChangeMemoryPosition, instructionExecutionOnRun } from "./Core/TinyCPUFunctions"
+import OptionsPanel from './Components/OptionsPanel';
+import { saveAs } from 'file-saver';
 
 
 function App() {
@@ -194,12 +196,37 @@ function App() {
       }
   }
 
+  function handleClearMemories() {
+    resetMemories()
+    resetCpu()
+  }
+
+  function handleSaveMemories() {
+    var fileContent = ""
+    instMem.map( (instruction) => (
+      fileContent += `${instruction.address}:${(instruction.inst.is_valid) ? instruction.assembly : ""}\n`
+    ))
+    dataMem.map( (data) => (
+      fileContent += `${data.address}:${data.data}\n`
+    ))
+    console.log(fileContent)
+
+    const file = new Blob(
+      [fileContent], 
+      { type : 'text/plain;charset=utf-8'}
+    )
+    saveAs(file, 'output.mem')
+  }
+
+
+
   return (
     <div className = {styles.container}>
       <InstructionMemory memoryData = {instMem} updateMem = {updateInstMem} pc = {regs.PC} highlight = {highlightInstMem}/>
       <DataMemory memoryData = {dataMem} updateMem = {updateDataMem} highlight = {highlightDataMem}/>
       <RegisterBank regs={regs} highlight = {highlightReg} />
       <SimulationControl handleStepBtn={handleStepBtn} handleResetBtn={resetCpu} hltReached={hltReached} handleRunBtn={handleRunBtn} timeout={timeout}/>
+      <OptionsPanel handleClearMemories={handleClearMemories} handleSaveMemories={handleSaveMemories}/>
     </div>
 
   );
