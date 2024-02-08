@@ -1,7 +1,7 @@
 import styles from "./Register.module.css"
 
 
-function Register ( {name, data, type} ) {
+function Register ( {name, data, type, highlight} ) {
 
     function parseDataToHex(data) {
         var hexData = parseInt(data).toString(16).toUpperCase()
@@ -12,7 +12,7 @@ function Register ( {name, data, type} ) {
     }
 
     return (
-        <div className = {styles.container}>
+        <div className = {highlight ? styles.container_highlight : styles.container}>
             <h2>{name}</h2>
             { type === "8-bit-hex" && 
                 <p>{parseDataToHex(data)}</p>
