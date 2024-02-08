@@ -15,7 +15,8 @@ function App() {
   const [hltReached, setHltReached] = useState( false )
   const [timeout, setTimeout] = useState ( false )
   const [highlightDataMem, setHighlightDataMem] = useState ( {highlight : false, address : -1} )
-  const [highlightInstMem, setHighlightInstMem] = useState ( {highlight : false, address : -1})
+  const [highlightInstMem, setHighlightInstMem] = useState ( {highlight : false, address : -1} )
+  const [highlightReg, setHighlightReg] = useState ( {highlight:false, reg : ""} )
   
   useEffect( () => {
     resetCpu() 
@@ -32,7 +33,7 @@ function App() {
     console.log("[Effect Inst Mem]")
     console.log(instMem)
 
-    handleMemoriesHighlight(regs.PC)
+    handleMemoriesAndRegHighlight(regs.PC)
   }, [instMem])
 
 
@@ -85,7 +86,7 @@ function App() {
     })
     setHltReached(false)
     setTimeout(false)
-    handleMemoriesHighlight(0)
+    handleMemoriesAndRegHighlight(0)
   }
 
   function updateInstMem(address, instruction) {
@@ -104,7 +105,7 @@ function App() {
       setRegs(returnInstExec.regs)
       setHltReached(returnInstExec.hlt_reached)
 
-      handleMemoriesHighlight(returnInstExec.regs.PC)
+      handleMemoriesAndRegHighlight(returnInstExec.regs.PC)
     }
   }
 
@@ -139,12 +140,13 @@ function App() {
     setHltReached(returnInstExec.hlt_reached)
   }
 
-  function handleMemoriesHighlight(PC) {
+  function handleMemoriesAndRegHighlight(PC) {
     if(instMem.length === 0) 
       return
 
       var jumpInstructions = ["JMP", "JC"]
       var dataMemInstructions = ["LDR", "STR", "ADD", "SUB"]
+      var regInstructions = ["LDR", "STR", "ADD", "SUB"]
 
       var currInst = instMem[PC]
 
@@ -172,10 +174,23 @@ function App() {
             highlight : true,
             address : parseInt(currInst.inst.fields.mem)
           }
-          
         }
+
+        var highlightReg = {
+          highlight : false,
+          reg : ""
+        }
+
+        if(regInstructions.includes(currInst.inst.fields.inst)) {
+          highlightReg = {
+            highlight : true,
+            reg : currInst.inst.fields.reg
+          }
+        }
+
         setHighlightInstMem(highlightInstMem)
-        setHighlightDataMem(highlightDataMem)        
+        setHighlightDataMem(highlightDataMem)  
+        setHighlightReg(highlightReg)      
       }
   }
 
@@ -183,7 +198,7 @@ function App() {
     <div className = {styles.container}>
       <InstructionMemory memoryData = {instMem} updateMem = {updateInstMem} pc = {regs.PC} highlight = {highlightInstMem}/>
       <DataMemory memoryData = {dataMem} updateMem = {updateDataMem} highlight = {highlightDataMem}/>
-      <RegisterBank regs={regs} />
+      <RegisterBank regs={regs} highlight = {highlightReg} />
       <SimulationControl handleStepBtn={handleStepBtn} handleResetBtn={resetCpu} hltReached={hltReached} handleRunBtn={handleRunBtn} timeout={timeout}/>
     </div>
 
