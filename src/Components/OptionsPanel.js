@@ -1,16 +1,7 @@
 import styles from "./OptionsPanel.module.css"
+import MemFilePicker from "./MemFilePicker";
 
 function OptionsPanel( {handleClearMemories, handleSaveMemories, handleLoadMemories} ) {
-    
-    const handleFileChange = async (e) => {
-        e.preventDefault()
-        const reader = new FileReader()
-        reader.onload = async (e) => { 
-            const content = (e.target.result)
-            handleLoadMemories(content)
-        };
-        reader.readAsText(e.target.files[0])
-    }
 
     return (
         <div className = {styles.container}>
@@ -22,10 +13,19 @@ function OptionsPanel( {handleClearMemories, handleSaveMemories, handleLoadMemor
                 <button onClick={handleSaveMemories}>
                     Save Memories
                 </button>
-                <input type="file" onChange={handleFileChange}/>
+                <MemFilePicker handleLoadMemories={handleLoadMemories}/>
+                
             </div>
         </div>
     )
 }
 
 export default OptionsPanel
+
+/*{filesContent.map((file, index) => (
+<div>
+    <h2>{file.name}</h2>
+    <div key={index}>{file.content}</div>
+    <br />
+</div>
+))}*/
