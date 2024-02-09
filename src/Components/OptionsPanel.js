@@ -1,13 +1,13 @@
 import styles from "./OptionsPanel.module.css"
 
-function OptionsPanel( {handleClearMemories, handleSaveMemories} ) {
+function OptionsPanel( {handleClearMemories, handleSaveMemories, handleLoadMemories} ) {
     
     const handleFileChange = async (e) => {
         e.preventDefault()
         const reader = new FileReader()
         reader.onload = async (e) => { 
-            const text = (e.target.result)
-            console.log(text)
+            const content = (e.target.result)
+            handleLoadMemories(content)
         };
         reader.readAsText(e.target.files[0])
     }
