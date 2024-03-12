@@ -1,7 +1,7 @@
 @import url('https://fonts.cdnfonts.com/css/ds-digital');
 
 .container {
-    border : 1px solid #ccc;
+    border : 0.5px solid white;
     margin: 5px 5px 5px 5px;
     width: 35px;
     align-items: center;
@@ -9,7 +9,6 @@
 }
 
 .container_highlight {
-    border : 1px solid #ccc;    
     margin: 5px 5px 5px 5px;
     width: 35px;
     align-items: center;
