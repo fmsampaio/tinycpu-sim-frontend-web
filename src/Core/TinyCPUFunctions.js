@@ -189,7 +189,7 @@ const instructionExecution = function(dataMem, regs, currInstruction, updateData
             console.log(ulaResult)
 
             ulaResult = (ulaResult > 127) ? ulaResult - 255 : ulaResult
-            ulaResult = (ulaResult < 128) ? ulaResult + 256 : ulaResult
+            ulaResult = (ulaResult < -128) ? ulaResult + 256 : ulaResult
                         
             newRegsState = {
                 ...regs,
@@ -202,6 +202,9 @@ const instructionExecution = function(dataMem, regs, currInstruction, updateData
             ulaResult = (inst.fields.inst === "ADD") ? 
                 regs.RB + dataMem[memAddress].data : 
                 regs.RB - dataMem[memAddress].data 
+            
+            ulaResult = (ulaResult > 127) ? ulaResult - 255 : ulaResult
+            ulaResult = (ulaResult < -128) ? ulaResult + 256 : ulaResult
 
             newRegsState = {
                 ...regs,
