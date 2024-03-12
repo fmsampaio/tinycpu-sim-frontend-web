@@ -1,15 +1,17 @@
 .regs_container {
-  margin: 50px 25px 0 25px;
+  margin-top: 15px;
   border: 1px solid #000000;
-  min-width: 200px;
+  width: 100%;
+  height: fit-content;
 }
 
 .internal_regs_container {
-  display : grid;
-  grid-template-columns: auto auto;
-  place-items: center;
+  display : flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
   
 h2 {
   text-align: center;
+  margin-top: 5px;
 }

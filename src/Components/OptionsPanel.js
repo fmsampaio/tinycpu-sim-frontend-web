@@ -7,13 +7,13 @@ function OptionsPanel( {handleClearMemories, handleSaveMemories, handleLoadMemor
         <div className = {styles.container}>
             <h2>Options</h2>
             <div className = {styles.btns_container} >
-                <button onClick={handleClearMemories}>
+                <button className={styles.button_4} onClick={handleClearMemories}>
                     Clear Memories
                 </button>
-                <button onClick={handleSaveMemories}>
+                <button className={styles.button_4} onClick={handleSaveMemories}>
                     Save Memories
                 </button>
-                <MemFilePicker handleLoadMemories={handleLoadMemories}/>
+                <MemFilePicker className={styles.button_4} handleLoadMemories={handleLoadMemories}/>
                 
             </div>
         </div>
@@ -21,11 +21,3 @@ function OptionsPanel( {handleClearMemories, handleSaveMemories, handleLoadMemor
 }
 
 export default OptionsPanel
-
-/*{filesContent.map((file, index) => (
-<div>
-    <h2>{file.name}</h2>
-    <div key={index}>{file.content}</div>
-    <br />
-</div>
-))}*/

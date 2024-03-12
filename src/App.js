@@ -256,9 +256,13 @@ function App() {
     <div className = {styles.container}>
       <InstructionMemory memoryData = {instMem} updateMem = {updateInstMem} pc = {regs.PC} highlight = {highlightInstMem}/>
       <DataMemory memoryData = {dataMem} updateMem = {updateDataMem} highlight = {highlightDataMem}/>
-      <RegisterBank regs={regs} highlight = {highlightReg} />
-      <SimulationControl handleStepBtn={handleStepBtn} handleResetBtn={resetCpu} hltReached={hltReached} handleRunBtn={handleRunBtn} timeout={timeout}/>
-      <OptionsPanel handleClearMemories={handleClearMemories} handleSaveMemories={handleSaveMemories} handleLoadMemories={handleLoadMemories}/>
+      <div className={styles.side_container}>
+        <RegisterBank regs={regs} highlight = {highlightReg} />
+        <div className={styles.controls_container}>
+          <SimulationControl handleStepBtn={handleStepBtn} handleResetBtn={resetCpu} hltReached={hltReached} handleRunBtn={handleRunBtn} timeout={timeout}/>
+          <OptionsPanel handleClearMemories={handleClearMemories} handleSaveMemories={handleSaveMemories} handleLoadMemories={handleLoadMemories}/>
+        </div>
+      </div>
     </div>
 
   );
