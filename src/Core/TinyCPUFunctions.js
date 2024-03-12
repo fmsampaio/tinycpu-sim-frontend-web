@@ -186,6 +186,11 @@ const instructionExecution = function(dataMem, regs, currInstruction, updateData
                 regs.RA + dataMem[memAddress].data : 
                 regs.RA - dataMem[memAddress].data 
             
+            console.log(ulaResult)
+
+            ulaResult = (ulaResult > 127) ? ulaResult - 255 : ulaResult
+            ulaResult = (ulaResult < 128) ? ulaResult + 256 : ulaResult
+                        
             newRegsState = {
                 ...regs,
                 "RA" : ulaResult,
