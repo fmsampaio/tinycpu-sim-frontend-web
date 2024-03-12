@@ -9,16 +9,19 @@ function SimulationControl( {handleStepBtn, handleResetBtn, handleRunBtn, hltRea
             <h2>Simulation</h2>
             <div className = {styles.btns_container}>
                 <button 
+                    className={styles.button_4}
                     onClick={handleStepBtn}
                 >
                     Step
                 </button>
                 <button
+                    className={styles.button_4}
                     onClick={handleRunBtn}
                 >
                     Run
                 </button>
                 <button
+                    className={styles.button_4}
                     onClick={handleResetBtn}
                 >
                     Reset

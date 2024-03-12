@@ -26,13 +26,12 @@ function MemFilePicker( {handleLoadMemories} ) {
 
     return (
         <>
-            <button onClick={() => handleSelectFileOnClick()}>Select file</button>
-            <br />
+            <button className={styles.button_4} onClick={() => handleSelectFileOnClick()}>Select file</button>
             {showFileContent && filesContent.map((file, index) => (
                 <div className={styles.file_info_container}>
-                    <p className={styles.file_p}><b>Arquivo selecionado:</b><br />{file.name}</p>
+                    <p className={styles.file_p}><b>Selected file:</b><br />{file.name}</p>
                     
-                    <button onClick={handleOnClick}>Load memories</button>
+                    <button className={styles.button_4} onClick={handleOnClick}>Load memories</button>
                 </div>
             ))}
             
