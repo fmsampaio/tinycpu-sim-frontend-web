@@ -315,6 +315,14 @@ function parseAssemblyFields(assembly) {
         isValid = false
     }
 
+    if((isRegInstruction(inst) || isJmpInstruction(inst) || isJcInstruction(inst))) {
+        var memAddress = fields.mem
+        if(memAddress < 0 || memAddress > 15) {
+            fields = {}
+            isValid = false
+        }
+    }
+
     return {
         "is_valid" : isValid,
         "fields" : fields
