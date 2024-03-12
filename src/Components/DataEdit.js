@@ -2,12 +2,14 @@ import styles from "./DataEdit.module.css"
 import {useState, useEffect} from "react"
 import {validateInputData} from "../Core/TinyCPUFunctions"
 
-function DataEdit( {data, updateMem, highlight} ) {
+function DataEdit( {data, updateMem, highlight, isHeader} ) {
     const [dataState, setDataState] = useState(data)
-    const [dataValue, setDataValue] = useState(data.data.toString())
+    const [dataValue, setDataValue] = useState(!isHeader ? data.data.toString(): {})
 
     useEffect( () => {
-        setDataValue(data.data.toString())
+        if(!isHeader) {
+            setDataValue(data.data.toString())
+        }
     }, [data])
 
     const handleFocus = (event) => event.target.select();
@@ -34,21 +36,36 @@ function DataEdit( {data, updateMem, highlight} ) {
     
 
     return (
-        <div className = {highlight ? styles.container_highlight : styles.container}>
-            <div className = {`${styles.item} ${styles.address}`}>
-                {dataState.address}
+        <>
+        {isHeader && 
+            <div className = {styles.container}>
+                <div className = {`${styles.item} ${styles.address}`}>
+                    <b>Add.</b>
+                </div>
+                <div className = {styles.item}>
+                    <b>Data</b>
+                </div>
             </div>
-            <div>
-                <input
-                    type = "text"
-                    value = {dataValue}
-                    className = {styles.item}
-                    onBlur = {handleDataInput}
-                    onFocus = {handleFocus}
-                    onChange = {handleOnChange}
-                />
+
+        }
+        {!isHeader && 
+            <div className = {highlight ? styles.container_highlight : styles.container}>
+                <div className = {`${styles.item} ${styles.address}`}>
+                    {dataState.address}
+                </div>
+                <div>
+                    <input
+                        type = "text"
+                        value = {dataValue}
+                        className = {styles.item}
+                        onBlur = {handleDataInput}
+                        onFocus = {handleFocus}
+                        onChange = {handleOnChange}
+                    />
+                </div>
             </div>
-        </div>
+            }
+        </>
     )
 }
 
