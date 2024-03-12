@@ -1,7 +1,7 @@
 .container {
-  border: 1px solid #000000;
   width: 150px;
   height: min-content;
+  background-color: rgba(220, 220, 220, 0.39);
 }
 
 h2 {

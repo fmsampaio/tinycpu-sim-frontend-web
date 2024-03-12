@@ -1,5 +1,9 @@
 .container {
   display: flex;
+  width: fit-content;
+  padding: 50px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .side_container {

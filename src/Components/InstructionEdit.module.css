@@ -3,7 +3,7 @@
 	max-width: 330px;
 	margin: 2px auto;
 	display: flex;
-	border : 0.5px solid white
+	border : solid 0.5px transparent;
 }
 
 .container_pc_highlight {
@@ -46,6 +46,5 @@
 }
 
 .data_field {
-	width : 100px
-	
+	width : 100px	
 }

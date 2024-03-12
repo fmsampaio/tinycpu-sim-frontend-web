@@ -1,8 +1,7 @@
 .regs_container {
-  margin-top: 15px;
-  border: 1px solid #000000;
   width: 100%;
   height: fit-content;
+  background-color: rgba(220, 220, 220, 0.39);
 }
 
 .internal_regs_container {
