@@ -21,11 +21,3 @@ function OptionsPanel( {handleClearMemories, handleSaveMemories, handleLoadMemor
 }
 
 export default OptionsPanel
-
-/*{filesContent.map((file, index) => (
-<div>
-    <h2>{file.name}</h2>
-    <div key={index}>{file.content}</div>
-    <br />
-</div>
-))}*/

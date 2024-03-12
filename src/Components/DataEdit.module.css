@@ -1,13 +1,13 @@
 .container {
     width: 80%;
-	margin: 5px auto;
+	margin: 2px auto;
 	display: flex;
 	border : 0.5px solid white
 }
 
 .container_highlight {
 	width: 80%;
-	margin: 5px auto;
+	margin: 2px auto;
 	display: flex;
 	border : 0.5px solid rgba(128, 0, 0, 0.575);
 	background: rgba(168, 2, 2, 0.123);

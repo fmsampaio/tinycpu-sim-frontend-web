@@ -1,7 +1,7 @@
 .container {
 	min-width: 310px;
 	max-width: 330px;
-	margin: 5px auto;
+	margin: 2px auto;
 	display: flex;
 	border : 0.5px solid white
 }
@@ -9,7 +9,7 @@
 .container_pc_highlight {
 	min-width: 310px;
 	max-width: 330px;
-	margin: 5px auto;
+	margin: 2px auto;
 	display: flex;
 	border : 0.5px solid rgba(0, 128, 0, 0.575);
 	background: rgba(2, 168, 2, 0.123);

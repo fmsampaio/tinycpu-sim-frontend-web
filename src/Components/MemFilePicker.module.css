@@ -1,7 +1,14 @@
 .file_info_container {
     border : solid gray 0.2px;
-    padding : 25px;
+    padding : 10px;
     display: flex;
     flex-direction: column;
     place-items: center;
+}
+
+.file_p {
+    font-size: small;
+    margin: 0px;
+    border: solid 1px
+
 }
