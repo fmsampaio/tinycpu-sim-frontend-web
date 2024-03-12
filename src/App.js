@@ -4,7 +4,7 @@ import InstructionMemory from './Components/InstructionMemory';
 import DataMemory from './Components/DataMemory'
 import RegisterBank from './Components/RegisterBank';
 import SimulationControl from './Components/SimulationControl';
-import { instructionExecution, instructionFetch, copyAndChangeMemoryPosition, instructionExecutionOnRun } from "./Core/TinyCPUFunctions"
+import { instructionExecution, instructionFetch, copyAndChangeMemoryPosition, instructionExecutionOnRun, parseAssembly } from "./Core/TinyCPUFunctions"
 import OptionsPanel from './Components/OptionsPanel';
 import { saveAs } from 'file-saver';
 
@@ -218,6 +218,39 @@ function App() {
     saveAs(file, 'output.mem')
   }
 
+  function handleLoadMemories(fileContent) {
+    var lines = fileContent.split("\n")
+    /* Instructions memory */
+    var instMem = []
+    for (let i = 0; i < 16; i++) {
+      const assembly = lines[i].split(":")[1];      
+      var newInstData = parseAssembly(assembly)
+
+      var newInst = {
+          pcIsHere : i === 0,
+          address : i,
+          assembly : assembly,
+          inst : newInstData
+      }
+      instMem.push(newInst)
+    }
+
+    var dataMem = []
+    for (let i = 16; i < 32; i++) {
+      const data = parseInt(lines[i].split(":")[1]);
+      var newData = {
+        address : i,
+        data : data
+      }
+      dataMem.push(newData)
+    }
+
+    resetCpu()
+    setInstMem(instMem)
+    setDataMem(dataMem)
+    
+  }
+
 
 
   return (
@@ -226,7 +259,7 @@ function App() {
       <DataMemory memoryData = {dataMem} updateMem = {updateDataMem} highlight = {highlightDataMem}/>
       <RegisterBank regs={regs} highlight = {highlightReg} />
       <SimulationControl handleStepBtn={handleStepBtn} handleResetBtn={resetCpu} hltReached={hltReached} handleRunBtn={handleRunBtn} timeout={timeout}/>
-      <OptionsPanel handleClearMemories={handleClearMemories} handleSaveMemories={handleSaveMemories}/>
+      <OptionsPanel handleClearMemories={handleClearMemories} handleSaveMemories={handleSaveMemories} handleLoadMemories={handleLoadMemories}/>
     </div>
 
   );
