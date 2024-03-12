@@ -7,6 +7,7 @@ import SimulationControl from './Components/SimulationControl';
 import { instructionExecution, instructionFetch, copyAndChangeMemoryPosition, instructionExecutionOnRun, parseAssembly } from "./Core/TinyCPUFunctions"
 import OptionsPanel from './Components/OptionsPanel';
 import { saveAs } from 'file-saver';
+import AboutPanel from './Components/AboutPanel';
 
 
 function App() {
@@ -262,6 +263,7 @@ function App() {
           <SimulationControl handleStepBtn={handleStepBtn} handleResetBtn={resetCpu} hltReached={hltReached} handleRunBtn={handleRunBtn} timeout={timeout}/>
           <OptionsPanel handleClearMemories={handleClearMemories} handleSaveMemories={handleSaveMemories} handleLoadMemories={handleLoadMemories}/>
         </div>
+        <AboutPanel />
       </div>
     </div>
 
