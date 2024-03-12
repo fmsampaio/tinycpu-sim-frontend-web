@@ -2,14 +2,16 @@ import styles from "./InstructionEdit.module.css"
 import { parseAssembly } from "../Core/TinyCPUFunctions"
 import { useEffect, useState } from "react"
 
-function InstructionEdit( {instruction, updateMem, pcIsHere, highlight} ) {
+function InstructionEdit( {instruction, updateMem, pcIsHere, highlight, isHeader} ) {
 
     const [instState, setInstState] = useState(instruction)
-    const [instValue, setInstValue] = useState(instruction.assembly)
+    const [instValue, setInstValue] = useState(!isHeader ? instruction.assembly : '')
 
     useEffect( () => {
-        setInstState(instruction)
-        setInstValue(instruction.assembly)
+        if(!isHeader) {
+            setInstState(instruction)
+            setInstValue(instruction.assembly)
+        }
     }, [instruction])
 
     function handleOnChange(e) {
@@ -36,43 +38,67 @@ function InstructionEdit( {instruction, updateMem, pcIsHere, highlight} ) {
     
 
     return (
-        
-        <div className = {pcIsHere ? styles.container_pc_highlight : (highlight ? styles.container_mem_highlight : styles.container)}>
-            <div className = {`${styles.item} ${styles.pc_is_here}`}>
-                {pcIsHere ? "PC" : ""}
+        <>        
+        {isHeader && 
+            <>
+                <div className = {styles.container}>
+                    <div className = {`${styles.item} ${styles.pc_is_here}`}>
+                        <b>PC</b>
+                    </div>
+                    <div className = {`${styles.item} ${styles.address}`}>
+                        <b>Add.</b>
+                    </div>
+                    <div className = {`${styles.item} ${styles.data_field}`}>
+                        <b>Assembly</b>
+                    </div>
+                    <div className={styles.item}>
+                        <b>Hex.</b>
+                    </div>
+                    <div className={styles.item}>
+                        <b>Binary</b>
+                    </div>
+                </div>
+            </>
+        }
+        {!isHeader && 
+            <div className = {pcIsHere ? styles.container_pc_highlight : (highlight ? styles.container_mem_highlight : styles.container)}>
+                <div className = {`${styles.item} ${styles.pc_is_here}`}>
+                    {pcIsHere ? "PC" : ""}
+                </div>
+                <div className = {`${styles.item} ${styles.address}`}>
+                    {instState.address}
+                </div>
+                <div>
+                    { (instState.inst.is_valid | instState.assembly === "") ? 
+                        <input 
+                            type= "text"
+                            value= {instValue}        
+                            className = {`${styles.item} ${styles.data_field}`}
+                            onBlur = {handleAssemblyInput}
+                            onFocus = {handleFocus}
+                            onChange = {handleOnChange}
+                        />
+                    :
+                        <input 
+                            type= "text"
+                            value= {instValue}
+                            className = {`${styles.item} ${styles.data_field} ${styles.not_valid}`}
+                            onBlur = {handleAssemblyInput}
+                            onFocus = {handleFocus}
+                            onChange = {handleOnChange}
+                        />
+                    }
+                </div>
+                <div className={styles.item}>
+                    {instState.inst.hex}
+                </div>
+                <div className={styles.item}>
+                    {instState.inst.bin}
+                </div>
+                
             </div>
-            <div className = {`${styles.item} ${styles.address}`}>
-                {instState.address}
-            </div>
-            <div>
-                { (instState.inst.is_valid | instState.assembly === "") ? 
-                    <input 
-                        type= "text"
-                        value= {instValue}        
-                        className = {styles.item}
-                        onBlur = {handleAssemblyInput}
-                        onFocus = {handleFocus}
-                        onChange = {handleOnChange}
-                    />
-                :
-                    <input 
-                        type= "text"
-                        value= {instValue}
-                        className = {`${styles.item} ${styles.not_valid}`}
-                        onBlur = {handleAssemblyInput}
-                        onFocus = {handleFocus}
-                        onChange = {handleOnChange}
-                    />
-                }
-            </div>
-            <div className={styles.item}>
-                {instState.inst.hex}
-            </div>
-            <div className={styles.item}>
-                {instState.inst.bin}
-            </div>
-            
-        </div>
+        }
+        </>
         
     )
 

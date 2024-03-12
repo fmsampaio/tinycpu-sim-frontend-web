@@ -1,29 +1,32 @@
+@import url('https://fonts.cdnfonts.com/css/ds-digital');
+
 .container {
     border : 1px solid #ccc;
-    height: fit-content;
-    padding: 10px;
-    margin: 10px 10px 10px 10px;
-    width: 50px;
+    margin: 5px 5px 5px 5px;
+    width: 35px;
     align-items: center;
+    min-height: fit-content;
 }
 
 .container_highlight {
-    border : 1px solid #ccc;
-    height: fit-content;
-    padding: 10px;
-    margin: 10px 10px 10px 10px;
-    width: 50px;
+    border : 1px solid #ccc;    
+    margin: 5px 5px 5px 5px;
+    width: 35px;
     align-items: center;
 	border : 0.5px solid rgba(128, 0, 0, 0.575);
-	background: rgba(168, 2, 2, 0.123);
+	background: rgba(168, 2, 2, 0.062);
 }
 
-h2 {
+h3 {
     text-align: center;
+    margin: 0px;
 }
 
 p {
+    font-family: 'DS-Digital', sans-serif;
+    font-size: xx-large;
     text-align: center;
+    margin: 0px
 }
 
 .green {
@@ -41,12 +44,13 @@ p {
 
 
 .led {
+    
     border-radius: 5px;
     width: 10px;
     height: 10px;
     box-shadow: 0px 0px 3px black;
     margin: 5px;
-    zoom: 2;
+    zoom: 1.8;
 }
 
 .led:after {
@@ -62,3 +66,4 @@ p {
     -webkit-border-bottom-left-radius: 4px 3px;
     background-image: -webkit-linear-gradient(top, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.2) 100%);
 }
+

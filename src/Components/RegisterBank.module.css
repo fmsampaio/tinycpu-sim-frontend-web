@@ -1,7 +1,9 @@
 .regs_container {
-  margin: 50px 25px 0 25px;
+  margin: 25px 5px 0 5px;
   border: 1px solid #000000;
-  min-width: 200px;
+  width: fit-content;
+  height: fit-content;
+  padding: 10px;
 }
 
 .internal_regs_container {
@@ -11,5 +13,6 @@
 }
   
 h2 {
+  
   text-align: center;
 }

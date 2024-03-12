@@ -1,26 +1,26 @@
 .container {
-    margin: 50px 25px 0 25px;
-    border: 1px solid #000000;
-    min-width: 300px;
-    height: min-content;
-    padding-bottom : 25px
-  }
+  margin: 25px 5px 0 5px;
+  border: 1px solid #000000;
+  min-width: 300px;
+  height: min-content;
+  padding-bottom : 25px
+}
 
-  h2 {
-    text-align: center;
-  }
+h2 {
+  text-align: center;
+}
 
 
 .btns_container {
-    display: flex;
-    flex-direction: column;
-    place-items: center;
+  display: flex;
+  flex-direction: column;
+  place-items: center;
 }
 
 button {
-    margin: 10px 10px 10px 10px
+  margin: 10px 10px 10px 10px
 }
 
 input {
-    margin: 10px 10px 10px 10px
+  margin: 10px 10px 10px 10px
 }
