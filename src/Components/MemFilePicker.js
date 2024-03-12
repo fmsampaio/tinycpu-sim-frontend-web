@@ -29,9 +29,9 @@ function MemFilePicker( {handleLoadMemories} ) {
             <button onClick={() => handleSelectFileOnClick()}>Select file</button>
             <br />
             {showFileContent && filesContent.map((file, index) => (
-                <div>
-                    <h2>{file.name}</h2>
-                    <div key={index}>{file.content}</div>
+                <div className={styles.file_info_container}>
+                    <p>Arquivo selecionado:</p>
+                    <p> {file.name}</p>
                     <br />
                     <button onClick={handleOnClick}>Load memories</button>
                 </div>
