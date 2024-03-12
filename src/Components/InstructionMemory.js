@@ -5,7 +5,7 @@ function InstructionMemory( {memoryData, updateMem, pc, highlight} ) {
 
     return (
         <div className = {styles.container}>
-            <h1>Instructions Memory</h1>
+            <h2>Instructions<br/>Memory</h2>
             <div>
                 { 
                 memoryData.map( (inst) => (

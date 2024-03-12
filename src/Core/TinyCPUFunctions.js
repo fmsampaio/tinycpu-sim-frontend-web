@@ -240,7 +240,28 @@ function copyAndChangeMemoryPosition(memory, position, newContent) {
       })
 }
 
-export {parseAssembly, instructionFetch, instructionExecution, copyAndChangeMemoryPosition, instructionExecutionOnRun}
+const validateInputData = function(data) {
+    console.log('Validating data...')
+
+    if(isNaN(parseInt(data))) {
+        return {
+            status : false,
+            data : 0
+        }
+    }
+    else {
+        var dataInt = parseInt(data)
+        dataInt = (dataInt < -128) ? -128 : dataInt
+        dataInt = (dataInt > 127) ? 127 : dataInt
+        return {
+            status : true,
+            data : dataInt
+        }
+    }
+
+}
+
+export {parseAssembly, instructionFetch, instructionExecution, copyAndChangeMemoryPosition, instructionExecutionOnRun, validateInputData}
 
 function parseAssemblyFields(assembly) {
     const assemblyStr = String(assembly).trim().toUpperCase()

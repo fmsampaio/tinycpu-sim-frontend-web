@@ -4,7 +4,7 @@ import Register from './Register';
 function RegisterBank( {regs, highlight} ) {
     return (
         <div className = {styles.regs_container}>
-        <h1>Registers</h1>
+        <h2>Registers</h2>
         <div className = {styles.internal_regs_container}>
           <Register name="PC" data={regs.PC} type="4-bit-dec" highlight={false}/>
           <Register name="RI" data={regs.RI} type="8-bit-hex" highlight={false}/>
