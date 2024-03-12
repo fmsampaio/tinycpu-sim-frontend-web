@@ -23,7 +23,6 @@ function InstructionEdit( {instruction, updateMem, pcIsHere, highlight} ) {
         var newInstData = parseAssembly(e.target.value)
 
         var newInst = {
-            pcIsHere : instState.pcIsHere,
             address : instState.address,
             assembly : e.target.value.toUpperCase(),
             inst : newInstData
