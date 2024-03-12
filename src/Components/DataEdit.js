@@ -1,5 +1,6 @@
 import styles from "./DataEdit.module.css"
 import {useState, useEffect} from "react"
+import {validateInputData} from "../Core/TinyCPUFunctions"
 
 function DataEdit( {data, updateMem, highlight} ) {
     const [dataState, setDataState] = useState(data)
@@ -13,20 +14,16 @@ function DataEdit( {data, updateMem, highlight} ) {
 
     function handleDataInput(e) {
         console.log("[Data] Evento de perda de foco")
-        var newDataState = {}
-        if(!isNaN(parseInt(e.target.value))) {
-            newDataState = {
-                "address" : dataState.address,
-                "data" : parseInt(e.target.value)
-            }    
+
+        var validatedData = validateInputData(e.target.value)
+
+        var newDataState = {
+            "address" : dataState.address,
+            "data" : validatedData.data
         }
-        else {
-            newDataState = {
-                "address" : dataState.address,
-                "data" : 0
-            }
-            e.target.value = 0
-        }
+       
+        e.target.value = validatedData.data
+        
         setDataState(newDataState)
         updateMem(newDataState.address, newDataState)
     }

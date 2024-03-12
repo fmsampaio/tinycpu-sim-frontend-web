@@ -186,6 +186,11 @@ const instructionExecution = function(dataMem, regs, currInstruction, updateData
                 regs.RA + dataMem[memAddress].data : 
                 regs.RA - dataMem[memAddress].data 
             
+            console.log(ulaResult)
+
+            ulaResult = (ulaResult > 127) ? ulaResult - 255 : ulaResult
+            ulaResult = (ulaResult < -128) ? ulaResult + 256 : ulaResult
+                        
             newRegsState = {
                 ...regs,
                 "RA" : ulaResult,
@@ -197,6 +202,9 @@ const instructionExecution = function(dataMem, regs, currInstruction, updateData
             ulaResult = (inst.fields.inst === "ADD") ? 
                 regs.RB + dataMem[memAddress].data : 
                 regs.RB - dataMem[memAddress].data 
+            
+            ulaResult = (ulaResult > 127) ? ulaResult - 255 : ulaResult
+            ulaResult = (ulaResult < -128) ? ulaResult + 256 : ulaResult
 
             newRegsState = {
                 ...regs,
@@ -240,7 +248,28 @@ function copyAndChangeMemoryPosition(memory, position, newContent) {
       })
 }
 
-export {parseAssembly, instructionFetch, instructionExecution, copyAndChangeMemoryPosition, instructionExecutionOnRun}
+const validateInputData = function(data) {
+    console.log('Validating data...')
+
+    if(isNaN(parseInt(data))) {
+        return {
+            status : false,
+            data : 0
+        }
+    }
+    else {
+        var dataInt = parseInt(data)
+        dataInt = (dataInt < -128) ? -128 : dataInt
+        dataInt = (dataInt > 127) ? 127 : dataInt
+        return {
+            status : true,
+            data : dataInt
+        }
+    }
+
+}
+
+export {parseAssembly, instructionFetch, instructionExecution, copyAndChangeMemoryPosition, instructionExecutionOnRun, validateInputData}
 
 function parseAssemblyFields(assembly) {
     const assemblyStr = String(assembly).trim().toUpperCase()
@@ -287,6 +316,14 @@ function parseAssemblyFields(assembly) {
     }
     else {
         isValid = false
+    }
+
+    if((isRegInstruction(inst) || isJmpInstruction(inst) || isJcInstruction(inst))) {
+        var memAddress = fields.mem
+        if(memAddress < 0 || memAddress > 15) {
+            fields = {}
+            isValid = false
+        }
     }
 
     return {

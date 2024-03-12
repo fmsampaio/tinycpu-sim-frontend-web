@@ -6,7 +6,7 @@ function SimulationControl( {handleStepBtn, handleResetBtn, handleRunBtn, hltRea
 
     return (
         <div className = {styles.container}>
-            <h1>Simulation</h1>
+            <h2>Simulation</h2>
             <div className = {styles.btns_container}>
                 <button 
                     onClick={handleStepBtn}

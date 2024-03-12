@@ -227,7 +227,6 @@ function App() {
       var newInstData = parseAssembly(assembly)
 
       var newInst = {
-          pcIsHere : i === 0,
           address : i,
           assembly : assembly,
           inst : newInstData

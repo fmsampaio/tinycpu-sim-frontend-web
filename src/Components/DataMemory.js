@@ -5,7 +5,7 @@ function DataMemory( {memoryData, updateMem, highlight} ) {
 
     return (
         <div className = {styles.container}>
-            <h1>Data Memory</h1>
+            <h2>Data Memory</h2>
             <div>
                 { 
                 memoryData.map( (data) => (
