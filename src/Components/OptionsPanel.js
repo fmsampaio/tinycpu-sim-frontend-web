@@ -5,7 +5,7 @@ function OptionsPanel( {handleClearMemories, handleSaveMemories, handleLoadMemor
 
     return (
         <div className = {styles.container}>
-            <h1>Options</h1>
+            <h2>Options</h2>
             <div className = {styles.btns_container} >
                 <button onClick={handleClearMemories}>
                     Clear Memories
