@@ -21,7 +21,6 @@ function InstructionEdit( {instruction, updateMem, pcIsHere, highlight, isHeader
     const handleFocus = (event) => event.target.select();
     
     function handleAssemblyInput(e) {
-        console.log("Evento de perda de foco")
         var newInstData = parseAssembly(e.target.value)
 
         var newInst = {

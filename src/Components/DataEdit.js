@@ -15,8 +15,6 @@ function DataEdit( {data, updateMem, highlight, isHeader} ) {
     const handleFocus = (event) => event.target.select();
 
     function handleDataInput(e) {
-        console.log("[Data] Evento de perda de foco")
-
         var validatedData = validateInputData(e.target.value)
 
         var newDataState = {

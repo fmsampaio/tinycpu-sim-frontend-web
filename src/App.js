@@ -27,15 +27,8 @@ function App() {
   }, []
   )
 
-  useEffect( () => {
-    console.log("[Effect Data Mem]")
-    console.log(dataMem)
-  }, [dataMem])
 
   useEffect( () => {
-    console.log("[Effect Inst Mem]")
-    console.log(instMem)
-
     handleMemoriesAndRegHighlight(regs.PC)
   }, [instMem])
 
@@ -210,7 +203,6 @@ function App() {
     dataMem.map( (data) => (
       fileContent += `${data.address}:${data.data}\n`
     ))
-    console.log(fileContent)
 
     const file = new Blob(
       [fileContent], 

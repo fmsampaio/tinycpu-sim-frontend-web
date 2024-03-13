@@ -11,8 +11,6 @@ const parseAssembly = function (assembly) {
             "hex" : ""
         }
 
-    console.log(fieldsParsed)
-
     var binCodeStr = getOpCode(fieldsParsed.inst)
 
     if(isRegInstruction(fieldsParsed.inst)) {
@@ -46,7 +44,6 @@ const parseAssembly = function (assembly) {
 
 const instructionFetch = function (instMem, regs) {
     const currInstruction = instMem[regs.PC]
-    console.log(currInstruction)
 
     const newRegsState = {
       ...regs, 
@@ -87,7 +84,6 @@ const instructionExecutionOnRun = function(dataMem, regs, currInstruction) {
             "address" : memAddress,
             "data" : (inst.fields.reg === "RA") ? regs.RA : regs.RB
         }
-        console.log(newData)
 
         dataMem = copyAndChangeMemoryPosition(dataMem, memAddress, newData)
     }
@@ -175,7 +171,6 @@ const instructionExecution = function(dataMem, regs, currInstruction, updateData
             "address" : memAddress,
             "data" : (inst.fields.reg === "RA") ? regs.RA : regs.RB
         }
-        console.log(newData)
         updateDataMem(memAddress, newData)
     }
     else if(inst.fields.inst === "ADD" || inst.fields.inst === "SUB") {
@@ -186,8 +181,6 @@ const instructionExecution = function(dataMem, regs, currInstruction, updateData
                 regs.RA + dataMem[memAddress].data : 
                 regs.RA - dataMem[memAddress].data 
             
-            console.log(ulaResult)
-
             ulaResult = (ulaResult > 127) ? ulaResult - 255 : ulaResult
             ulaResult = (ulaResult < -128) ? ulaResult + 256 : ulaResult
                         
@@ -249,8 +242,6 @@ function copyAndChangeMemoryPosition(memory, position, newContent) {
 }
 
 const validateInputData = function(data) {
-    console.log('Validating data...')
-
     if(isNaN(parseInt(data))) {
         return {
             status : false,
