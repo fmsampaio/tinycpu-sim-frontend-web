@@ -104,9 +104,5 @@ function InstructionEdit( {instruction, updateMem, pcIsHere, highlight, isHeader
 
 }
 
-//<input type="text" defaultValue={instruction.assembly}></input>
-//<span>{instruction.hex}</span>
-/*
-*/
 
 export default InstructionEdit

@@ -7,7 +7,7 @@ const parseAssembly = function (assembly) {
             "is_valid" : false,
             "fields" : {},
             "bin" : "",
-            "dec" : -1,
+            "dec" : 0,
             "hex" : ""
         }
 

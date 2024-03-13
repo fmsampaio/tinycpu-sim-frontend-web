@@ -152,7 +152,7 @@ function App() {
       var regInstructions = ["LDR", "STR", "ADD", "SUB"]
 
       var currInst = instMem[PC]
-
+      
       if(currInst.inst.is_valid) {
         var highlightInstMem = {
           highlight : false,
@@ -239,16 +239,15 @@ function App() {
     for (let i = 16; i < 32; i++) {
       const data = parseInt(lines[i].split(":")[1]);
       var newData = {
-        address : i,
+        address : i-16,
         data : data
       }
       dataMem.push(newData)
     }
-
-    resetCpu()
+    
     setInstMem(instMem)
     setDataMem(dataMem)
-    
+    resetCpu()
   }
 
 
