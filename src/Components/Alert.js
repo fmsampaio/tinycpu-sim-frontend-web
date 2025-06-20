@@ -32,7 +32,6 @@ function Alert ( {message, type, show}) {
                     <p>{message}</p>
                 </div>
             }
-
             </>
         }
         </>

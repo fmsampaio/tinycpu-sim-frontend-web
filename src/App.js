@@ -16,6 +16,7 @@ function App() {
   const [dataMem, setDataMem] = useState( [] )
   const [regs, setRegs] = useState( [] )
   const [hltReached, setHltReached] = useState( false )
+  const [invalidInst, setInvalidInst] = useState( false )
   const [timeout, setTimeout] = useState ( false )
   const [highlightDataMem, setHighlightDataMem] = useState ( {highlight : false, address : -1} )
   const [highlightInstMem, setHighlightInstMem] = useState ( {highlight : false, address : -1} )
@@ -82,6 +83,7 @@ function App() {
     })
     setHltReached(false)
     setTimeout(false)
+    setInvalidInst(false)
     handleMemoriesAndRegHighlight(0)
   }
 
@@ -94,12 +96,13 @@ function App() {
   }
 
   function handleStepBtn() {
-    if(!hltReached) {
+    if(!hltReached && !invalidInst) {
       const returnInstFetch = instructionFetch( instMem, regs )
       const returnInstExec = instructionExecution( dataMem, returnInstFetch.regs, returnInstFetch.curr_inst, updateDataMem  )
 
       setRegs(returnInstExec.regs)
       setHltReached(returnInstExec.hlt_reached)
+      setInvalidInst(returnInstExec.invalid_inst)
 
       handleMemoriesAndRegHighlight(returnInstExec.regs.PC)
     }
@@ -112,10 +115,11 @@ function App() {
     var regsTmp = regs
     var dataMemTmp = dataMem
     var hltReachedTmp = hltReached
+    var invalidInstTmp = invalidInst
 
     var countInstructions = 0
 
-    while(!hltReachedTmp) {
+    while(!hltReachedTmp && !invalidInstTmp) {
       if(countInstructions > 1000) {
         setTimeout(true)
         break
@@ -127,13 +131,15 @@ function App() {
       regsTmp = returnInstExec.regs
       dataMemTmp = returnInstExec.data_memory
       hltReachedTmp = returnInstExec.hlt_reached
+      invalidInstTmp = returnInstExec.invalid_inst
 
       countInstructions += 1
     }
 
     setDataMem(dataMemTmp)
     setRegs(returnInstExec.regs)
-    setHltReached(returnInstExec.hlt_reached)
+    setHltReached(hltReachedTmp)
+    setInvalidInst(invalidInstTmp)
   }
 
   function handleMemoriesAndRegHighlight(PC) {
@@ -251,7 +257,7 @@ function App() {
       <div className={styles.side_container}>
         <RegisterBank regs={regs} highlight = {highlightReg} />
         <div className={styles.controls_container}>
-          <SimulationControl handleStepBtn={handleStepBtn} handleResetBtn={resetCpu} hltReached={hltReached} handleRunBtn={handleRunBtn} timeout={timeout}/>
+          <SimulationControl handleStepBtn={handleStepBtn} handleResetBtn={resetCpu} hltReached={hltReached} invalidInst={invalidInst} handleRunBtn={handleRunBtn} timeout={timeout}/>
           <OptionsPanel handleClearMemories={handleClearMemories} handleSaveMemories={handleSaveMemories} handleLoadMemories={handleLoadMemories}/>
         </div>
         <AboutPanel />

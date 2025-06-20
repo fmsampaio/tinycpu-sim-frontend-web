@@ -62,6 +62,7 @@ const instructionExecutionOnRun = function(dataMem, regs, currInstruction) {
 
     var newRegsState = regs
     var wasHltReached = false
+    var wasInvalidInst = ! currInstruction.valid
 
     if(inst.fields.inst === "LDR") {
         let memAddress = parseInt(inst.fields.mem)
@@ -139,7 +140,8 @@ const instructionExecutionOnRun = function(dataMem, regs, currInstruction) {
     return {
         regs : newRegsState,
         hlt_reached : wasHltReached,
-        data_memory : dataMem
+        data_memory : dataMem,
+        invalid_inst : wasInvalidInst
     }
 }
 
@@ -149,6 +151,7 @@ const instructionExecution = function(dataMem, regs, currInstruction, updateData
 
     var newRegsState = regs
     var wasHltReached = false
+    var wasInvalidInst = ! currInstruction.inst.is_valid
 
     if(inst.fields.inst === "LDR") {
         let memAddress = parseInt(inst.fields.mem)
@@ -230,7 +233,8 @@ const instructionExecution = function(dataMem, regs, currInstruction, updateData
 
     return {
         regs : newRegsState,
-        hlt_reached : wasHltReached
+        hlt_reached : wasHltReached,
+        invalid_inst : wasInvalidInst
     }
 }
 
