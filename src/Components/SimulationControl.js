@@ -1,7 +1,7 @@
 import Alert from "./Alert"
 import styles from "./SimulationControl.module.css"
 
-function SimulationControl( {handleStepBtn, handleResetBtn, handleRunBtn, hltReached, timeout} ) {
+function SimulationControl( {handleStepBtn, handleResetBtn, handleRunBtn, hltReached, invalidInst, noHltDetected, timeout} ) {
     
 
     return (
@@ -29,6 +29,8 @@ function SimulationControl( {handleStepBtn, handleResetBtn, handleRunBtn, hltRea
             </div>
             <Alert message="Timeout!" type="error" show={timeout}/>     
             <Alert message="HLT reached!" type="success" show={hltReached}/>     
+            <Alert message="Invalid instruction!" type="error" show={invalidInst}/>
+            <Alert message="No HLT instruction!" type="error" show={noHltDetected}/>
         </div>
     )
 }

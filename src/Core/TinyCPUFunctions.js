@@ -62,6 +62,7 @@ const instructionExecutionOnRun = function(dataMem, regs, currInstruction) {
 
     var newRegsState = regs
     var wasHltReached = false
+    var wasInvalidInst = !inst.is_valid
 
     if(inst.fields.inst === "LDR") {
         let memAddress = parseInt(inst.fields.mem)
@@ -139,16 +140,17 @@ const instructionExecutionOnRun = function(dataMem, regs, currInstruction) {
     return {
         regs : newRegsState,
         hlt_reached : wasHltReached,
-        data_memory : dataMem
+        data_memory : dataMem,
+        invalid_inst : wasInvalidInst
     }
 }
-
 
 const instructionExecution = function(dataMem, regs, currInstruction, updateDataMem) {
     const inst = currInstruction.inst
 
     var newRegsState = regs
     var wasHltReached = false
+    var wasInvalidInst = ! inst.is_valid
 
     if(inst.fields.inst === "LDR") {
         let memAddress = parseInt(inst.fields.mem)
@@ -230,7 +232,8 @@ const instructionExecution = function(dataMem, regs, currInstruction, updateData
 
     return {
         regs : newRegsState,
-        hlt_reached : wasHltReached
+        hlt_reached : wasHltReached,
+        invalid_inst : wasInvalidInst
     }
 }
 
@@ -260,7 +263,20 @@ const validateInputData = function(data) {
 
 }
 
-export {parseAssembly, instructionFetch, instructionExecution, copyAndChangeMemoryPosition, instructionExecutionOnRun, validateInputData}
+const checkHltInstInMemory = function(instMem) {
+    var hasHltInst = false
+    instMem.forEach(data => {
+        if(data.inst.is_valid) {
+            if(data.inst.fields.inst === 'HLT') {
+                hasHltInst = true
+                return
+            }
+        }
+    });
+    return hasHltInst    
+}
+
+export {parseAssembly, instructionFetch, instructionExecution, copyAndChangeMemoryPosition, instructionExecutionOnRun, validateInputData, checkHltInstInMemory}
 
 function parseAssemblyFields(assembly) {
     const assemblyStr = String(assembly).trim().toUpperCase()

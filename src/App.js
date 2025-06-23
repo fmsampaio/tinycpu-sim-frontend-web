@@ -4,7 +4,7 @@ import InstructionMemory from './Components/InstructionMemory';
 import DataMemory from './Components/DataMemory'
 import RegisterBank from './Components/RegisterBank';
 import SimulationControl from './Components/SimulationControl';
-import { instructionExecution, instructionFetch, copyAndChangeMemoryPosition, instructionExecutionOnRun, parseAssembly } from "./Core/TinyCPUFunctions"
+import { instructionExecution, instructionFetch, copyAndChangeMemoryPosition, instructionExecutionOnRun, parseAssembly, checkHltInstInMemory } from "./Core/TinyCPUFunctions"
 import OptionsPanel from './Components/OptionsPanel';
 import { saveAs } from 'file-saver';
 import AboutPanel from './Components/AboutPanel';
@@ -15,8 +15,12 @@ function App() {
   const [instMem, setInstMem] = useState( [] )
   const [dataMem, setDataMem] = useState( [] )
   const [regs, setRegs] = useState( [] )
+  
   const [hltReached, setHltReached] = useState( false )
-  const [timeout, setTimeout] = useState ( false )
+  const [timeout, setTimeout] = useState( false )
+  const [invalidInst, setInvalidInst] = useState( false )
+  const [noHltDetected, setNoHltDetected] = useState( false )
+  
   const [highlightDataMem, setHighlightDataMem] = useState ( {highlight : false, address : -1} )
   const [highlightInstMem, setHighlightInstMem] = useState ( {highlight : false, address : -1} )
   const [highlightReg, setHighlightReg] = useState ( {highlight:false, reg : ""} )
@@ -31,6 +35,10 @@ function App() {
   useEffect( () => {
     handleMemoriesAndRegHighlight(regs.PC)
   }, [instMem])
+
+  useEffect( () => {
+    console.log(noHltDetected)
+  }, [noHltDetected])
 
 
   function resetMemories() {
@@ -82,6 +90,7 @@ function App() {
     })
     setHltReached(false)
     setTimeout(false)
+    setInvalidInst(false)
     handleMemoriesAndRegHighlight(0)
   }
 
@@ -94,12 +103,13 @@ function App() {
   }
 
   function handleStepBtn() {
-    if(!hltReached) {
+    if(!hltReached && !invalidInst) {
       const returnInstFetch = instructionFetch( instMem, regs )
       const returnInstExec = instructionExecution( dataMem, returnInstFetch.regs, returnInstFetch.curr_inst, updateDataMem  )
 
       setRegs(returnInstExec.regs)
       setHltReached(returnInstExec.hlt_reached)
+      setInvalidInst(returnInstExec.invalid_inst)
 
       handleMemoriesAndRegHighlight(returnInstExec.regs.PC)
     }
@@ -112,10 +122,19 @@ function App() {
     var regsTmp = regs
     var dataMemTmp = dataMem
     var hltReachedTmp = hltReached
+    var invalidInstTmp = invalidInst
 
     var countInstructions = 0
 
-    while(!hltReachedTmp) {
+    var noHltDetectedTmp = !checkHltInstInMemory(instMem)
+    setNoHltDetected(noHltDetectedTmp)
+
+    if(noHltDetectedTmp) {
+      console.log('No HLT!')
+      return 
+    }
+
+    while(!hltReachedTmp && !invalidInstTmp) {
       if(countInstructions > 1000) {
         setTimeout(true)
         break
@@ -127,67 +146,69 @@ function App() {
       regsTmp = returnInstExec.regs
       dataMemTmp = returnInstExec.data_memory
       hltReachedTmp = returnInstExec.hlt_reached
+      invalidInstTmp = returnInstExec.invalid_inst
 
       countInstructions += 1
     }
 
     setDataMem(dataMemTmp)
     setRegs(returnInstExec.regs)
-    setHltReached(returnInstExec.hlt_reached)
+    setHltReached(hltReachedTmp)
+    setInvalidInst(invalidInstTmp)
   }
 
   function handleMemoriesAndRegHighlight(PC) {
     if(instMem.length === 0) 
       return
 
-      var jumpInstructions = ["JMP", "JC"]
-      var dataMemInstructions = ["LDR", "STR", "ADD", "SUB"]
-      var regInstructions = ["LDR", "STR", "ADD", "SUB"]
+    var jumpInstructions = ["JMP", "JC"]
+    var dataMemInstructions = ["LDR", "STR", "ADD", "SUB"]
+    var regInstructions = ["LDR", "STR", "ADD", "SUB"]
 
-      var currInst = instMem[PC]
+    var currInst = instMem[PC]
+    
+    if(currInst.inst.is_valid) {
+      var highlightInstMem = {
+        highlight : false,
+        address : -1
+      } 
       
-      if(currInst.inst.is_valid) {
-        var highlightInstMem = {
-          highlight : false,
-          address : -1
-        } 
+      if(jumpInstructions.includes(currInst.inst.fields.inst)) {
+        highlightInstMem = {
+          highlight : true,
+          address : parseInt(currInst.inst.fields.mem)
+        }
         
-        if(jumpInstructions.includes(currInst.inst.fields.inst)) {
-          highlightInstMem = {
-            highlight : true,
-            address : parseInt(currInst.inst.fields.mem)
-          }
-          
-        }
-
-        var highlightDataMem = {
-          highlight : false,
-          address : -1
-        }
-
-        if(dataMemInstructions.includes(currInst.inst.fields.inst)) {
-          highlightDataMem = {
-            highlight : true,
-            address : parseInt(currInst.inst.fields.mem)
-          }
-        }
-
-        var highlightReg = {
-          highlight : false,
-          reg : ""
-        }
-
-        if(regInstructions.includes(currInst.inst.fields.inst)) {
-          highlightReg = {
-            highlight : true,
-            reg : currInst.inst.fields.reg
-          }
-        }
-
-        setHighlightInstMem(highlightInstMem)
-        setHighlightDataMem(highlightDataMem)  
-        setHighlightReg(highlightReg)      
       }
+
+      var highlightDataMem = {
+        highlight : false,
+        address : -1
+      }
+
+      if(dataMemInstructions.includes(currInst.inst.fields.inst)) {
+        highlightDataMem = {
+          highlight : true,
+          address : parseInt(currInst.inst.fields.mem)
+        }
+      }
+
+      var highlightReg = {
+        highlight : false,
+        reg : ""
+      }
+
+      if(regInstructions.includes(currInst.inst.fields.inst)) {
+        highlightReg = {
+          highlight : true,
+          reg : currInst.inst.fields.reg
+        }
+      }
+
+      setHighlightInstMem(highlightInstMem)
+      setHighlightDataMem(highlightDataMem)  
+      setHighlightReg(highlightReg)      
+    }
   }
 
   function handleClearMemories() {
@@ -251,7 +272,7 @@ function App() {
       <div className={styles.side_container}>
         <RegisterBank regs={regs} highlight = {highlightReg} />
         <div className={styles.controls_container}>
-          <SimulationControl handleStepBtn={handleStepBtn} handleResetBtn={resetCpu} hltReached={hltReached} handleRunBtn={handleRunBtn} timeout={timeout}/>
+          <SimulationControl handleStepBtn={handleStepBtn} handleResetBtn={resetCpu} hltReached={hltReached} invalidInst={invalidInst} noHltDetected={noHltDetected} handleRunBtn={handleRunBtn} timeout={timeout}/>
           <OptionsPanel handleClearMemories={handleClearMemories} handleSaveMemories={handleSaveMemories} handleLoadMemories={handleLoadMemories}/>
         </div>
         <AboutPanel />
